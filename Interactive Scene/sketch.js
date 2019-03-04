@@ -1,22 +1,24 @@
-// Interactive Scene
+// Interactive Scene: Breakout Game
 // Alina Sami
 // February 14, 2019
 //
 // Extra for Experts:
 // - describe what you did to take this project "above and beyond"
 
-let cnv;
-let buttonColor;
+function preload() {
+  soundFormats('mp3', 'ogg');
+  mySound = loadSound('assets/doorbell.mp3');
+}
 
-//Set up the variables that determine x and y coordinates of alien.
-let alienX = 105;
-let alienY = 100;
+
+let cnv; //?????????????????????????????????????????????????
+let buttonColor;
 
 //Establish x,y position values for rectangle (shooter). 
 let x = 300;
 let y = 200;
 
-//Establish the width and height variables of rectangel (shooter).
+//Establish the width and height variables of rectangle (shooter).
 let rectWidth = 50;
 let rectHeight = 50;
 
@@ -29,12 +31,30 @@ let isMovingLeft;
 let increaseRectSize;
 let decreaseRectSize;
 
+//Bouncing Ball Variables:
+let ballX, ballY;
+let dx, dy;
+let radius;
+
 
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
   noStroke();
+
+  //Background sound:
+  mySound.setVolume(0.1);
+  mySound.play();
+
   buttonColor = 10;
+
+
+  //Bouncing Ball Set-Up:
+  ballX = width/2;
+  ballY = height/2;
+  dx = random(3, 10);
+  dy = random(3, 10);
+  radius = 25;
 } 
 
 
@@ -51,20 +71,20 @@ function draw() {
   fill (buttonColor);
   rect(windowWidth/3, windowHeight/4, 100, 100); 
 
-  //Mouse Curser:
-  fill(220, 200, 200, 50);
-  ellipse(mouseX, mouseY, 50, 50);
+
+
+  //Ball Movement:
+  moveBall();
+
+  bounceBall();
+
+  displayBall();
+
+
 
   //Key-controlled rectangle:
   fill(100, 100, 150);
   rect(x, y, rectWidth, rectHeight);
-
-  fill(250, 200, 90);
-  ellipse(alienX, alienY, 200, 50, 50);
-
-  alienX = alienX + random(-1,5);
-  alienY = alienY + random(-1,5);
-
 
   //Key-controlled Rectangle Movement:
   if (isMovingUp === true && (y >= 0)) {
@@ -79,6 +99,7 @@ function draw() {
   if (isMovingRight === true && (x <= windowWidth - rectWidth)) {
     x += 5;
   }
+
 }
 
 
@@ -129,3 +150,27 @@ function keyReleased() {
   }
 }
 
+
+// Move the ball.
+function moveBall() {
+  ballX += dx;
+  ballY += dy;
+}
+
+
+// Check for bounce.
+function bounceBall() {
+  if (ballX + radius >= width || ballX - radius <= 0) {
+    dx = -1 * dx;
+  }
+
+  if (ballY + radius >= height || ballY - radius <= 0) {
+    dy = -1 * dy;
+  }
+}
+
+
+// Display the ball
+function displayBall() {
+  ellipse(ballX, ballY, radius*2, radius*2);
+}
