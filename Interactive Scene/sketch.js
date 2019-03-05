@@ -15,6 +15,8 @@
 //Set fontsize for on-screen text.
 let fontSize = 60;
 
+let newButton;
+
 //Height of black banner on top of page.
 let bannerHeight = 100;
 
@@ -51,6 +53,8 @@ function setup() {
   createCanvas(windowWidth, windowHeight);
   noStroke();
 
+  newButton = createButton("Play");
+
   x = windowWidth/2;
   y = windowHeight - rectHeight;
 
@@ -84,13 +88,15 @@ function draw() {
 
 
   //Button function:
-  if (button) {
-    background(227);
-  } else {
-    background(160);
-  }
+  //if (button) {
+   // background(227);
+  //} else {
+   // background(160);
+  //}
 
+  fill(255);
   rect(windowWidth - 300, 10, 250, 80); 
+  fill(0);
   text('Restart', windowWidth - 290, 65);
   //Print Score:
   fill(255);
@@ -117,6 +123,11 @@ function draw() {
 
 }
 
+
+//window resize:
+function windowResized() {
+  resizeCanvas(windowWidth, windowHeight);
+}
 
 //If arrow keys are pressed, turn movement variables true to enable movement.
 function keyPressed() {
@@ -146,11 +157,11 @@ function keyReleased() {
 }
 
 //Button function:
-function mousePressed() {
-  if (mouseX > buttonX && mouseX < buttonX + buttonW && mouseY > buttonY && mouseY < buttonY + buttonH) {
-    button = !button;
-  }
-}
+//function mousePressed() {
+ // if (mouseX > buttonX && mouseX < buttonX + buttonW && mouseY > buttonY && mouseY < buttonY + buttonH) {
+//button = !button;
+ // }
+//}
 
 
 
@@ -178,12 +189,11 @@ function bounceBall() {
     if (ballX > x && ballX < x + rectWidth) {
       dy = -1 * dy;
       score += 1;
-      console.log("score");    ////just to check score addition in console. 
     }
     else {
       alert("GAME OVER");
       document.location.reload();    //????????????????????????????????????????
-      clearInterval(interval);
+      //clearInterval(interval);               dont need
     }
   }
   
