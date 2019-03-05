@@ -102,12 +102,12 @@ function draw() {
   displayBall();
 
   //Check for arrow key presses for Slider Movement:
- // if (isMovingLeft === true && (x >= 0)) {
- //   x -= 10;
- // }
- // if (isMovingRight === true && (x <= windowWidth - rectWidth)) {
- //   x += 10;
- // }
+  if (isMovingLeft === true && (x >= 0)) {
+    x -= 10;
+  }
+  if (isMovingRight === true && (x <= windowWidth - rectWidth)) {
+    x += 10;
+  }
 }
 
 
@@ -139,17 +139,6 @@ function displaySlider() {
 //function windowResized() {
  // resizeCanvas(windowWidth, windowHeight);
 //}
-
-
-//Check for arrow key presses for Slider Movement:
-function sliderMovement() {
-  if (isMovingLeft === true && (x >= 0)) {
-    x -= 10;
-  }
-  if (isMovingRight === true && (x <= windowWidth - rectWidth)) {
-    x += 10;
-  }
-}
 
 
 //If (left/right) arrowkeys are pressed, turns boolean variables true to enable Slider movement. 
