@@ -57,7 +57,7 @@ let isMovingRight, isMovingLeft;
 //Establishes Bouncing-ball position variables:
 let ballX, ballY;
 //Sets Bouncing-ball displacement: 
-dx = 3, dy = 3;
+let dx = 3, dy = 3;
 //Sets Bouncing-ball radius:
 let radius = 25;
 
@@ -90,32 +90,59 @@ function setup() {
 function draw() {
   background(200, 100, 100);
 
-  //Display Black Banner:
-  fill(0);
-  rect(0, 0, windowWidth, bannerHeight);
-
-  //Display 'Cheat' button:
-  fill(255);
-  rect(windowWidth - 300, cheatButtonY, cheatButtonW, cheatButtonH); 
-  fill(0);
-  text('Cheat!', windowWidth - 290, 65);
+  displayScore();
   
-  //Display Score on-screen:
-  fill(255);
-  text('Score: ' + score, 100, 75);
+  displayCheatButton();
 
+  displaySlider();
 
   //Display Ball and ball movement: 
   moveBall();
   bounceBall();
   displayBall();
 
+  //Check for arrow key presses for Slider Movement:
+ // if (isMovingLeft === true && (x >= 0)) {
+ //   x -= 10;
+ // }
+ // if (isMovingRight === true && (x <= windowWidth - rectWidth)) {
+ //   x += 10;
+ // }
+}
 
-  //Display (rectangular) Slider:
+
+//Display Score on top of a banner on-screen:
+function displayScore() {
+  //Create Black Banner first:
+  fill(0);
+  rect(0, 0, windowWidth, bannerHeight);
+  //Display score on top of banner:
+  fill(255);
+  text("Score: " + score, 100, 75);
+}
+
+//Display 'Cheat' button:
+function displayCheatButton() {
+  fill(255);
+  rect(windowWidth - 300, cheatButtonY, cheatButtonW, cheatButtonH); 
+  fill(0);
+  text("Cheat!", windowWidth - 290, 65);
+}
+
+//Display (rectangular) Slider:
+function displaySlider() {
   fill(100, 100, 150);
   rect(x, y, rectWidth, rectHeight);
+}
 
-  //Check for arrow key presses for Slider Movement:
+//window resize:
+//function windowResized() {
+ // resizeCanvas(windowWidth, windowHeight);
+//}
+
+
+//Check for arrow key presses for Slider Movement:
+function sliderMovement() {
   if (isMovingLeft === true && (x >= 0)) {
     x -= 10;
   }
@@ -123,14 +150,6 @@ function draw() {
     x += 10;
   }
 }
-
-
-
-
-//window resize:
-//function windowResized() {
- // resizeCanvas(windowWidth, windowHeight);
-//}
 
 
 //If (left/right) arrowkeys are pressed, turns boolean variables true to enable Slider movement. 
