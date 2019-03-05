@@ -56,8 +56,8 @@ let isMovingRight, isMovingLeft;
 
 //Establishes Bouncing-ball position variables:
 let ballX, ballY;
-//Sets Bouncing-ball displacement: 
-let dx = 3, dy = 3;
+//Establishes Bouncing-ball displacement variables: 
+let dx, dy;
 //Sets Bouncing-ball radius:
 let radius = 25;
 
@@ -78,6 +78,10 @@ function setup() {
   ballX = width/2;
   ballY = height/2;
 
+  //Assigns values for Bouncing-ball displacement:
+  dx = random(3, 10);
+  dy = random(3, 10);
+
 
   //Background sound:
   //mySound.setVolume(0.1);
@@ -91,6 +95,15 @@ function draw() {
   background(200, 100, 100);
 
   displayScore();
+
+  //beginShape(TRIANGLE_FAN);
+  //vertex(57.5, 50);
+  //vertex(57.5, 15);
+  //vertex(92, 50);
+  //vertex(57.5, 85);
+  //vertex(22, 50);
+  //vertex(57.5, 15);
+  //endShape();
   
   displayCheatButton();
 
@@ -129,7 +142,7 @@ function displayCheatButton() {
   text("Cheat!", windowWidth - 290, 65);
 }
 
-//Display (rectangular) Slider:
+//Display Slider:
 function displaySlider() {
   fill(100, 100, 150);
   rect(x, y, rectWidth, rectHeight);
@@ -169,6 +182,7 @@ function mousePressed() {
     rectWidth += 10;
   }
 }
+
 
 
 // Move the Bouncing-ball.
