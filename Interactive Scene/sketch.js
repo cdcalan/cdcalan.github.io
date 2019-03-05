@@ -29,7 +29,8 @@
 
 
 
-
+//sound effect variable:
+let soundEffect;
 
 //Variable that stores score:
 let score = 0;
@@ -62,6 +63,9 @@ let dx, dy;
 let radius = 25;
 
 
+function preload() {
+  soundEffect = loadSound("assets/Input-06.mp3");
+}
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
@@ -85,7 +89,7 @@ function setup() {
 
   //Background sound:
   //mySound.setVolume(0.1);
-  //mySound.play();
+  soundEffect.play();
 }
  
 
@@ -207,6 +211,7 @@ function bounceBall() {
   //Bounce off Slider if ball hits Slider surface: 
   if (ballY + radius >= y) {
     if (ballX > x && ballX < x + rectWidth) {
+      soundEffect.play();
       dy = -1 * dy;
       score += 1;
     }
