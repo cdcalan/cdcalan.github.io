@@ -1,51 +1,65 @@
 // Interactive Scene: Breakout Game
 // Alina Sami
-// Created: February 14, 2019           Due: March 4, 2019
+// Created: February 14, 2019           
 //
-// Extra for Experts:
-// - describe what you did to take this project "above and beyond"
-// - Explored a new way to reset the game using clearInterval() function, as well as reloading. 
-// - I added background sound to the game. 
+//Instructions:
+//This is a Breakout game, in which your goal is to use your Slider to make sure the ball never hits the 
+//ground. Use left and right arrow keys to move Slider left and right. Click on the 'Cheat' button in the 
+//top right-hand corner of the screen to make the game easier by increasing your Slider width by some 
+//amount, each time you click the button! Your running score is displayed in the top left-hand corner of 
+//the screen. If you fail, you will get an alert window that displays your total score during the 
+//game, and by clicking 'Ok', the game automatically resets. 
+//
+// Extra for Experts: (describe what you did to take this project "above and beyond")
+// - Explored a new way to reset the game by reloading the web page. 
+// - Added background sound to the game. 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 //function preload() {
   //soundFormats('mp3', 'ogg');
   //mySound = loadSound('assets/doorbell.mp3');
 //}
 
-//Set fontsize for on-screen text.
-let fontSize = 60;
+////////?????????????????//whats the advantage of setting score to 0 in variables or set up?
+//?????????????????????Which di you prefer:
+//x = 5
+//y = 7   
+//or 
+//x = 5, y= 7;
 
-let newButton;
+
+
+
+
+
+//Variable that stores score:
+let score = 0;
+
+//Sets size of font. 
+let fontSize = 60;
 
 //Height of black banner on top of page.
 let bannerHeight = 100;
 
-//Sets up button values (i.e., bool, x, y, width, height):
-let button = false;
-let buttonX = 50, buttonY = 50;
-let buttonW, buttonH = 75;
 
-//Establishes width and height variables of Rectangle.
+////Sets up button values (i.e.: x, y, width, height):
+let cheatButtonY = 10;
+let cheatButtonW = 250, cheatButtonH = 80;
+
+
+//Sets width and height of (rectangular) Slider.
 let rectWidth = 250, rectHeight = 50;
-
-//Establishes x and y position variables for Rectangle. 
+//Establishes x and y position variables for (rectangular) Slider. 
 let x, y;
-
-//Establishes variables that enable Rectangle movement by listening for arrow key presses and releases. 
+//Establishes boolean variables that enable Slider movement by listening for arrow key presses and releases. 
 let isMovingRight, isMovingLeft; 
 
-//??????????????????????????????????????????????????????????????????????
-let increaseRectSize, decreaseRectSize;
 
-//Bouncing-ball (x,y) position variables:
+//Establishes Bouncing-ball position variables:
 let ballX, ballY;
-//Bouncing-ball speed variables: 
-let dx, dy;
-//Bouncing-ball radius:
-let radius;
-
-//Variable to store score:
-let score;
+//Sets Bouncing-ball displacement: 
+dx = 3, dy = 3;
+//Sets Bouncing-ball radius:
+let radius = 25;
 
 
 
@@ -53,27 +67,21 @@ function setup() {
   createCanvas(windowWidth, windowHeight);
   noStroke();
 
-  newButton = createButton("Play");
+  //Sets size of text to fontSize for on-screen texts:
+  textSize(fontSize);
 
+  //Sets the start values for Slider coordinates.
   x = windowWidth/2;
   y = windowHeight - rectHeight;
 
-  //text size:
-  textSize(fontSize);
+  //Sets start values for Bouncing-ball coordinates:
+  ballX = width/2;
+  ballY = height/2;
+
 
   //Background sound:
   //mySound.setVolume(0.1);
   //mySound.play();
-
-  score = 0;
-
-  //Bouncing Ball Set-Up:
-  ballX = width/2;
-  ballY = height/2;
-  dx = 3;
-  dy = 3;
-  radius = 25;
-
 }
  
 
@@ -82,54 +90,50 @@ function setup() {
 function draw() {
   background(200, 100, 100);
 
-  //Black Banner:
+  //Display Black Banner:
   fill(0);
   rect(0, 0, windowWidth, bannerHeight);
 
-
-  //Button function:
-  //if (button) {
-   // background(227);
-  //} else {
-   // background(160);
-  //}
-
+  //Display 'Cheat' button:
   fill(255);
-  rect(windowWidth - 300, 10, 250, 80); 
+  rect(windowWidth - 300, cheatButtonY, cheatButtonW, cheatButtonH); 
   fill(0);
-  text('Restart', windowWidth - 290, 65);
-  //Print Score:
+  text('Cheat!', windowWidth - 290, 65);
+  
+  //Display Score on-screen:
   fill(255);
   text('Score: ' + score, 100, 75);
- 
 
-  //Ball Movement:
+
+  //Display Ball and ball movement: 
   moveBall();
   bounceBall();
   displayBall();
 
 
-  //Key-controlled rectangle:
+  //Display (rectangular) Slider:
   fill(100, 100, 150);
   rect(x, y, rectWidth, rectHeight);
 
-  //Key-controlled Rectangle Movement:
+  //Check for arrow key presses for Slider Movement:
   if (isMovingLeft === true && (x >= 0)) {
     x -= 10;
   }
   if (isMovingRight === true && (x <= windowWidth - rectWidth)) {
     x += 10;
   }
-
 }
+
+
 
 
 //window resize:
-function windowResized() {
-  resizeCanvas(windowWidth, windowHeight);
-}
+//function windowResized() {
+ // resizeCanvas(windowWidth, windowHeight);
+//}
 
-//If arrow keys are pressed, turn movement variables true to enable movement.
+
+//If (left/right) arrowkeys are pressed, turns boolean variables true to enable Slider movement. 
 function keyPressed() {
   if (keyCode === LEFT_ARROW) {
     isMovingLeft = true;
@@ -137,16 +141,10 @@ function keyPressed() {
   else if (keyCode === RIGHT_ARROW) {
     isMovingRight = true;
   }
-  if (key === "i") {
-    rectWidth += 5;
-  }
-  else if (key === "d") {
-    rectWidth -= 5;
-  }
 }
 
 
-//If arrow keys are released, turn movement variables false to stop movement. 
+//If (left/right) arrowkeys are released, turns booleans variables false to stop Slider movement. 
 function keyReleased() {
   if (keyCode === LEFT_ARROW) {
     isMovingLeft = false;
@@ -156,51 +154,54 @@ function keyReleased() {
   }
 }
 
-//Button function:
-//function mousePressed() {
- // if (mouseX > buttonX && mouseX < buttonX + buttonW && mouseY > buttonY && mouseY < buttonY + buttonH) {
-//button = !button;
- // }
-//}
+
+//If 'cheat' button clicked, Slider width increases by 10.
+function mousePressed() {
+  if (mouseX > (windowWidth - 300) && mouseX < ((windowWidth - 300) + 250) && mouseY > 10 && mouseY < 10 + 80) {
+    rectWidth += 10;
+  }
+}
 
 
-
-// Move the ball.
+// Move the Bouncing-ball.
 function moveBall() {
   ballX += dx;
   ballY += dy;
 }
 
 
-// Check for bounce.
+// Check for ball bounce.
 function bounceBall() {
-  //bounce off left and right walls:
+  //Bounce off left and right walls:
   if (ballX + radius >= width || ballX - radius <= 0) {
     dx = -1 * dx;
   }
 
-  //bounce off top banner wall:
+  //Bounce off top banner:
   if (ballY - radius <= bannerHeight) {
     dy = -1 * dy;
   }
   
-  //bounce off of rectangle if ball hits rectangle 
+  //Bounce off Slider if ball hits Slider surface: 
   if (ballY + radius >= y) {
     if (ballX > x && ballX < x + rectWidth) {
       dy = -1 * dy;
       score += 1;
     }
+
+    //If ball falls past Slider:   
     else {
-      alert("GAME OVER");
-      document.location.reload();    //????????????????????????????????????????
-      //clearInterval(interval);               dont need
+      //Display the alert for 'Game Over':
+      alert("GAME OVER! Your Score Was: " + score);
+      //And restart a new game:
+      document.location.reload();   
     }
   }
   
 }
 
 
-// Display the ball
+//Create the Bouncing-ball:
 function displayBall() {
   fill(250, 150, 100);
   ellipse(ballX, ballY, radius*2, radius*2);
