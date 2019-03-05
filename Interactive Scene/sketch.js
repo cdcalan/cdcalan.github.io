@@ -1,40 +1,49 @@
 // Interactive Scene: Breakout Game
 // Alina Sami
-// February 14, 2019
+// Created: February 14, 2019           Due: March 4, 2019
 //
 // Extra for Experts:
 // - describe what you did to take this project "above and beyond"
+// - Explored a new way to reset the game using clearInterval() function, as well as reloading. 
+// - I added background sound to the game. 
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+//function preload() {
+  //soundFormats('mp3', 'ogg');
+  //mySound = loadSound('assets/doorbell.mp3');
+//}
 
-function preload() {
-  soundFormats('mp3', 'ogg');
-  mySound = loadSound('assets/doorbell.mp3');
-}
+//Set fontsize for on-screen text.
+let fontSize = 60;
 
+//Height of black banner on top of page.
+let bannerHeight = 100;
 
-let cnv; //?????????????????????????????????????????????????
-let buttonColor;
+//Sets up button values (i.e., bool, x, y, width, height):
+let button = false;
+let buttonX = 50, buttonY = 50;
+let buttonW, buttonH = 75;
 
-//Establish x,y position values for rectangle (shooter). 
-let x = 300;
-let y = 200;
+//Establishes width and height variables of Rectangle.
+let rectWidth = 250, rectHeight = 50;
 
-//Establish the width and height variables of rectangle (shooter).
-let rectWidth = 50;
-let rectHeight = 50;
+//Establishes x and y position variables for Rectangle. 
+let x, y;
 
-//Establish movement variables that enable shooter movement by listening for arrow key presses/releases. 
-let isMovingUp;
-let isMovingDown;
-let isMovingRight;
-let isMovingLeft; 
+//Establishes variables that enable Rectangle movement by listening for arrow key presses and releases. 
+let isMovingRight, isMovingLeft; 
 
-let increaseRectSize;
-let decreaseRectSize;
+//??????????????????????????????????????????????????????????????????????
+let increaseRectSize, decreaseRectSize;
 
-//Bouncing Ball Variables:
+//Bouncing-ball (x,y) position variables:
 let ballX, ballY;
+//Bouncing-ball speed variables: 
 let dx, dy;
+//Bouncing-ball radius:
 let radius;
+
+//Variable to store score:
+let score;
 
 
 
@@ -42,20 +51,27 @@ function setup() {
   createCanvas(windowWidth, windowHeight);
   noStroke();
 
+  x = windowWidth/2;
+  y = windowHeight - rectHeight;
+
+  //text size:
+  textSize(fontSize);
+
   //Background sound:
-  mySound.setVolume(0.1);
-  mySound.play();
+  //mySound.setVolume(0.1);
+  //mySound.play();
 
-  buttonColor = 10;
-
+  score = 0;
 
   //Bouncing Ball Set-Up:
   ballX = width/2;
   ballY = height/2;
-  dx = random(3, 10);
-  dy = random(3, 10);
+  dx = 3;
+  dy = 3;
   radius = 25;
-} 
+
+}
+ 
 
 
 
@@ -64,22 +80,27 @@ function draw() {
 
   //Black Banner:
   fill(0);
-  rect(0, 0, windowWidth, 100);
-  setButtonColor();
-
-  //Button:
-  fill (buttonColor);
-  rect(windowWidth/3, windowHeight/4, 100, 100); 
+  rect(0, 0, windowWidth, bannerHeight);
 
 
+  //Button function:
+  if (button) {
+    background(227);
+  } else {
+    background(160);
+  }
+
+  rect(windowWidth - 300, 10, 250, 80); 
+  text('Restart', windowWidth - 290, 65);
+  //Print Score:
+  fill(255);
+  text('Score: ' + score, 100, 75);
+ 
 
   //Ball Movement:
   moveBall();
-
   bounceBall();
-
   displayBall();
-
 
 
   //Key-controlled rectangle:
@@ -87,37 +108,18 @@ function draw() {
   rect(x, y, rectWidth, rectHeight);
 
   //Key-controlled Rectangle Movement:
-  if (isMovingUp === true && (y >= 0)) {
-    y -= 5;
-  }
-  if (isMovingDown === true && (y <= windowHeight - rectHeight)) {
-    y += 5;
-  }
   if (isMovingLeft === true && (x >= 0)) {
-    x -= 5;
+    x -= 10;
   }
   if (isMovingRight === true && (x <= windowWidth - rectWidth)) {
-    x += 5;
+    x += 10;
   }
 
 }
-
-
-
-function setButtonColor() {
-  buttonColor = 255;
-}
-
 
 
 //If arrow keys are pressed, turn movement variables true to enable movement.
 function keyPressed() {
-  if (keyCode === UP_ARROW) {
-    isMovingUp = true;
-  } 
-  else if (keyCode === DOWN_ARROW) {
-    isMovingDown = true;
-  }
   if (keyCode === LEFT_ARROW) {
     isMovingLeft = true;
   } 
@@ -133,15 +135,8 @@ function keyPressed() {
 }
 
 
-
 //If arrow keys are released, turn movement variables false to stop movement. 
 function keyReleased() {
-  if (keyCode === UP_ARROW) {
-    isMovingUp = false;
-  } 
-  else if (keyCode === DOWN_ARROW) {
-    isMovingDown = false;
-  }
   if (keyCode === LEFT_ARROW) {
     isMovingLeft = false;
   } 
@@ -149,6 +144,14 @@ function keyReleased() {
     isMovingRight = false;
   }
 }
+
+//Button function:
+function mousePressed() {
+  if (mouseX > buttonX && mouseX < buttonX + buttonW && mouseY > buttonY && mouseY < buttonY + buttonH) {
+    button = !button;
+  }
+}
+
 
 
 // Move the ball.
@@ -160,17 +163,35 @@ function moveBall() {
 
 // Check for bounce.
 function bounceBall() {
+  //bounce off left and right walls:
   if (ballX + radius >= width || ballX - radius <= 0) {
     dx = -1 * dx;
   }
 
-  if (ballY + radius >= height || ballY - radius <= 0) {
+  //bounce off top banner wall:
+  if (ballY - radius <= bannerHeight) {
     dy = -1 * dy;
   }
+  
+  //bounce off of rectangle if ball hits rectangle 
+  if (ballY + radius >= y) {
+    if (ballX > x && ballX < x + rectWidth) {
+      dy = -1 * dy;
+      score += 1;
+      console.log("score");    ////just to check score addition in console. 
+    }
+    else {
+      alert("GAME OVER");
+      document.location.reload();    //????????????????????????????????????????
+      clearInterval(interval);
+    }
+  }
+  
 }
 
 
 // Display the ball
 function displayBall() {
+  fill(250, 150, 100);
   ellipse(ballX, ballY, radius*2, radius*2);
 }
