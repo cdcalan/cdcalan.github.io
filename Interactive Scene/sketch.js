@@ -213,7 +213,7 @@ function keyReleased() {
 
 //If 'cheat' button clicked, Slider width increases by 10.
 function mousePressed() {
-  if (mouseX > (windowWidth - 300) && mouseX < ((windowWidth - 300) + 250) && mouseY > 10 && mouseY < 10 + 80) {
+  if (mouseX > windowWidth - 300 && mouseX < (windowWidth - 300) + cheatButtonW && mouseY > cheatButtonY && mouseY < cheatButtonY + cheatButtonH) {
     rectWidth += 10;
   }
 }
