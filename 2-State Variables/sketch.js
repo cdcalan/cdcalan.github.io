@@ -5,10 +5,15 @@
 // Extra for Experts:
 // - describe what you did to take this project "above and beyond"
 
+
+let state;
+
 let fontSize = 30;
 let menuHeight = 600;
 let buttonWidth = 150;
 let buttonHeight = 50;
+
+
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
@@ -16,13 +21,21 @@ function setup() {
   textSize(fontSize);
 }
 
+
 function draw() {
   background(220);
 
-  //Display menu:
-  displayMenu();
+  if (state === "menu") {
+    //Display menu:
+    displayMenu();
+  }
+  else if (state === "other") {
+    //Display other object:
+    displayOther();
+  }
 
 }
+
 
 function displayMenu() {
   //Menu Outline:
@@ -36,7 +49,33 @@ function displayMenu() {
     rect(width/2, i, buttonWidth, buttonHeight);
     fill(100);
     text("Button 1", width/2 - buttonWidth/3, i + 10);
+    fill(255);
   }
+}
 
+
+function displayOther() {
+  fill(230, 100, 150);
+  ellipse(450, 450, 200, 200);
+}
+
+
+function mousePressed () {
+  if (state === "menu") {
+    if (clickedOnButton(mouseX, mouseY)) {
+      state = "other";
+    }
+  }
+}
+
+//define button x and y:
+function clickedOnButton(x, y) {
+  return x >= buttonX - buttonWidth/2 &&
+         x <= buttonX + buttonWidth/2 &&
+         y >= buttonY - buttonHeight/2 &&
+         y <= buttonY + buttonHeight/2;
 
 }
+
+
+//an object is just a container of properties and etc.
