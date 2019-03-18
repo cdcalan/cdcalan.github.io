@@ -17,6 +17,10 @@ let menuHeight = 600;
 let buttonWidth = 150;
 let buttonHeight = 50;
 
+let backButtonWidth = 200;
+let backButtonHeight = 75;
+
+
 
 
 function setup() {
@@ -25,11 +29,12 @@ function setup() {
   textSize(fontSize);
 
   buttonX = width/2;
+  state = "menu";
 }
 
 
 function draw() {
-  background(220);
+  background(0);
 
   if (state === "menu") {
     //Display menu:
@@ -41,6 +46,7 @@ function draw() {
   }
 
 }
+
 
 
 function displayMenu() {
@@ -62,8 +68,15 @@ function displayMenu() {
 
 function displayOther() {
   background(255);
-  fill(230, 100, 150);
+  fill(250, 100, 150);
   ellipse(450, 450, 200, 200);
+
+  // Create Back Button:
+  rectMode(CORNER);
+  fill(200, 75, 75);
+  rect(windowWidth - (backButtonWidth+50), windowHeight - (backButtonHeight+50), backButtonWidth, backButtonHeight);
+  fill(0);
+  text("Back to Menu", windowWidth - (backButtonWidth+40), windowHeight - backButtonHeight);
 }
 
 
@@ -73,13 +86,21 @@ function mousePressed () {
       state = "other";
     }
   }
+  if (state === "other") {
+    if (clickedOnButton(mouseX, mouseY)) {
+      state = "menu";
+    }
+  }
 }
+
+
 
 //an object is just a container of properties and etc.
 //define button x and y:
 function clickedOnButton(x, y) {
+  if 
   return x >= buttonX - buttonWidth/2 &&
-         x <= buttonX + buttonWidth/2;
-      //   y >= buttonY - buttonHeight/2 &&
-        // y <= buttonY + buttonHeight/2;
+         x <= buttonX + buttonWidth/2 &&
+         y >= 225 - buttonHeight/2 &&
+         y <= 225 + buttonHeight/2;
 }
