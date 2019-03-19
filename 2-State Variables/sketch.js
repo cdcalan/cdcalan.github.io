@@ -80,6 +80,7 @@ function displayOther() {
 }
 
 
+//can make two functions for each button, or make one fucntion with two states, and different variables. 
 function mousePressed () {
   if (state === "menu") {
     if (clickedOnButton(mouseX, mouseY)) {
