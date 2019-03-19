@@ -16,32 +16,42 @@
 
 
 
-// Traffic Light Starter Code
-// Dan Schellenberg
-// Sept 25, 2018
 
-// GOAL: make a 'traffic light' simulator. For now, just have the light
-// changing according to time. You may want to investigate the millis()
-// function at https://p5js.org/reference/
+//https://p5js.org/examples/objects-array-of-objects.html
 
-let state;
-let greenLightDuration;
-let yellowLightDuration;
-let redLightDuration;
-let timeOfLastLightSwitch;
+
+// An array of buttons
+let buttons = [];
 
 function setup() {
-  createCanvas(600, 600);
-  state = 1;
-  greenLightDuration = 5000;
-  yellowLightDuration = 1500;
-  redLightDuration = 3000;
-  timeOfLastLightSwitch = 0;
+  createCanvas(600, 200);
+  // A loop to evenly space out the buttons along the window
+  //create buttons:
+  for (let i = 0; i < buttons.length; i++) {
+    buttons.push(new Jitter());
+  }
 }
 
 function draw() {
-  background(255);
-  drawOutlineOfLights();
-  checkState();
-  displayTheCorrectLight();
+  background(175);
+  // Show all the buttons
+  for (let i = 0; i < buttons.length; i++) {
+    buttons[i].display();
+  }
+}
+
+
+//Button class:
+class buttons {
+  display() {
+    ellipse(this.x, this.y, this.diameter, this.diameter);
+  }
+}
+
+
+function mousePressed() {
+  // When the mouse is pressed, we must check every single button
+  for (var i = 0; i < buttons.length; i++) {
+    buttons[i].click(mouseX, mouseY);
+  }
 }

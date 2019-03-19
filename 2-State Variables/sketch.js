@@ -99,9 +99,10 @@ function mousePressed () {
 //an object is just a container of properties and etc.
 //define button x and y:
 function clickedOnButton(x, y) {
-  if 
-  return x >= buttonX - buttonWidth/2 &&
-         x <= buttonX + buttonWidth/2 &&
-         y >= 225 - buttonHeight/2 &&
-         y <= 225 + buttonHeight/2;
+  if (state === "menu"){
+    return x >= buttonX - buttonWidth/2 &&
+           x <= buttonX + buttonWidth/2 &&
+           y >= 225 - buttonHeight/2 &&
+           y <= 225 + buttonHeight/2;
+  }
 }
