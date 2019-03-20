@@ -8,7 +8,7 @@
 //create sliders
 //creat screen sliding windows
 //make paint files be able to save on computer.
-//make buttons change color when hoered over
+//make buttons change color when hovered over
 //create a mini map - move around the screen
 //flappybird style game with jumping, etc. 
 //uylitpmate trafic light simulator

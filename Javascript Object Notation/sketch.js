@@ -53,3 +53,5 @@ function displayBall() {
   // display the ball
   ellipse(ball.x, ball.y, ball.radius*2, ball.radius*2);
 }
+
+function()
