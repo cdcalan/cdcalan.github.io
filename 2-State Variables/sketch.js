@@ -51,6 +51,7 @@ function setup() {
 
 function draw() {
   background(0);
+  ballIsHere();
 
   if (state === "menu") {
     //Display menu:
