@@ -16,7 +16,7 @@
 
 
 
-
+//an object is just a container of properties and etc.
 //https://p5js.org/examples/objects-array-of-objects.html
 
 

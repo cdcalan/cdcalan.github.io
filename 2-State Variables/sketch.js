@@ -5,33 +5,44 @@
 // Extra for Experts:
 // - describe what you did to take this project "above and beyond"
 
+////////////////////////////use time minis(), use screen sliding, use a rotating object. 
+///////////////////////////let name = prompt("what's you name?"); --> stops the rest of your program so use it in setup. 
 
-////use time minis(), use screen sliding, use a rotating object. 
 
-//let name = prompt("what's you name?"); --> stops the rest of your program so use it in setup. 
 
+
+//State variable for calling menu screen or other program:
 let state;
 
-let buttonX;
+//State variable for paint-program: stores available colors.  
+let colorState;
 
+//Sets font size:
 let fontSize = 30;
+
+//Menu outline and menu-buttons variables:
 let menuHeight = 600;
+
+let buttonX;
 let buttonWidth = 150;
 let buttonHeight = 50;
 
+//Variales for Backbutton outline:
+let backButtonX;
+let backButtonY;
 let backButtonWidth = 200;
 let backButtonHeight = 75;
 
-let backButtonX;
-let backButtonY;
-
+//Variables for Paint banner outline:
 let bannerX = 0;
 let bannerY = 0;
 let bannerW;
 let bannerH;
 
+//Menu-button names:
+let menuButtonNames = ["Button 1", "Button 2", "Button 3", "Button 4", "Button 5", "Button 6", "Button 7"];
 
-let colorState;
+
 
 
 function setup() {
@@ -39,51 +50,62 @@ function setup() {
   noStroke();
   textSize(fontSize);
 
-  buttonX = width/2;
+  //Start screen will always open with menu:
   state = "menu";
 
+  //Assigns values to menu button variables:
+  buttonX = width/2;
+
+  //Assigns values to Paint banner variables:
   bannerW = windowWidth;
   bannerH = windowHeight/5;
 
+  //Sets initial color in Paint to black:
   colorState = 0;
 }
 
 
-function draw() {
-  background(0);
-  ballIsHere();
 
+
+function draw() {
+  background(200, 120, 100);
+  //ballIsHere();        //FAKE
+
+  //Using state variables in menu to call different screens:
   if (state === "menu") {
     //Display menu:
     displayMenu();
   }
-  else if (state === "other") {
-    //Display other object:
-    displayOther();
+  else if (state === "paint") {
+    //Display paint screen:
+    displayPaintScreen();
   }
 
 }
 
+////'https://cs30.wmcicompsci.ca/oop/overview.html
 
-
+//Displays menu screen:
 function displayMenu() {
   //Menu Outline:
   rectMode(CENTER);
-  fill(150, 200, 300);
-  rect(width/2, height/2, 200, menuHeight);
+  fill(150, 200, 200);
+  rect(width/2, height/2, 300, menuHeight);
 
   //Menu Buttons:
   fill(255);
   for (let i=150; i<=menuHeight ; i+= 75) {
     rect(buttonX, i, buttonWidth, buttonHeight);
     fill(100);
-    text("Button 1", width/2 - buttonWidth/3, i + 10);
+    text(menuButtonNames, width/2 - buttonWidth/3, i + 10);
     fill(255);
   }
 }
 
 
-function displayOther() {
+
+//Displays the paint program screen:
+function displayPaintScreen() {
   let backButtonX = windowWidth - (backButtonWidth+40);
   let backButtonY = windowHeight - backButtonHeight;
 
@@ -104,7 +126,6 @@ function displayOther() {
   textSize(20);
   text("Color", bannerX+60, (bannerH/2)+60);
   fill(250, 100, 150);
-  chooseColor();
 
 
   // Create Back Button:
@@ -117,21 +138,18 @@ function displayOther() {
 }
 
 
-function chooseColor() {
-
-}
-
 
 
 //can make two functions for each button, or make one fucntion with two states, and different variables. 
 function mousePressed () {
   if (state === "menu") {
     if (clickedOnButton(mouseX, mouseY)) {
-      state = "other";
+      state = "paint";
     }
   }
-  if (state === "other") {
-    if (clickedOnButton(mouseX, mouseY)) {
+  else if (state === "paint") {
+    if (clickedOnBackButton(mouseX, mouseY)) {
+      print("yes");
       state = "menu";
     }  
     if (clickedOnColor(mouseX, mouseY)) {
@@ -141,17 +159,18 @@ function mousePressed () {
 }
 
 
+
 function clickedOnColor(x, y) {
-  if (state === "other") {
+  if (state === "paint") {
     return x >= bannerX + 50 && 
-        x <= (bannerX + 50) + (bannerW/12) &&
-        y >= bannerY + 40 &&
-        y <= (bannerY + 40) + (bannerH/2);
+           x <= (bannerX + 50) + (bannerW/12) &&
+           y >= bannerY + 40 &&
+           y <= (bannerY + 40) + (bannerH/2);
   }
 }
 
 
-//an object is just a container of properties and etc.
+
 //define button x and y:
 function clickedOnButton(x, y) {
   if (state === "menu"){
@@ -160,11 +179,13 @@ function clickedOnButton(x, y) {
            y >= 225 - buttonHeight/2 &&
            y <= 225 + buttonHeight/2;
   }
-  else if (state === "other"){
-    return x >= backButtonX - backButtonWidth/2 &&
-    x <= backButtonX + backButtonWidth/2 &&
-    y >= 225 - backButtonHeight/2 &&
-    y <= 225 + backButtonHeight/2;
+}
 
+function clickedOnBackButton(x, y) {
+  if (state === "paint"){
+    return x >= backButtonX &&
+           x <= backButtonX + backButtonWidth &&
+           y >= backButtonY &&
+           y <= backButtonY + backButtonHeight;
   }
 }
