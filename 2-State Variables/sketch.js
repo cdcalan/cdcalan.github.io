@@ -7,7 +7,7 @@
 
 ////////////////////////////use time minis(), use screen sliding, use a rotating object. 
 ///////////////////////////let name = prompt("what's you name?"); --> stops the rest of your program so use it in setup. 
-
+///////////////////////////////'https://cs30.wmcicompsci.ca/oop/overview.html
 
 
 
@@ -23,10 +23,6 @@ let fontSize = 30;
 //Menu outline and menu-buttons variables:
 let menuHeight = 600;
 
-let buttonX;
-let buttonWidth = 150;
-let buttonHeight = 50;
-
 //Variales for Backbutton outline:
 let backButtonX;
 let backButtonY;
@@ -39,10 +35,29 @@ let bannerY = 0;
 let bannerW;
 let bannerH;
 
+
+let buttonX;
+//let buttonWidth = 150;
+//let buttonHeight = 50;
+
+
 //Menu-button names:
-let menuButtonNames = ["Button 1", "Button 2", "Button 3", "Button 4", "Button 5", "Button 6", "Button 7"];
+let menuButtonNames = ["Button 1", "Paint", "Button 3", "Button 4", "Button 5", "Button 6", "Button 7"];
 
 
+
+//Class for Menu buttons (so that they display different names and each can be clicked).
+class Buttons {
+  constructor () {
+    this.buttonWidth = 150;
+    this.buttonHeight = 50;
+  }
+}
+
+//each time you want to use the this.button.. varaiule frm a class globally in a diff function, you have to set a new variable that houses that class
+//and call it as the name of that new variable + . + button.... (without the this you used in th eclass)
+let myButton = new Buttons();
+myButton.buttonWidth
 
 
 function setup() {
@@ -83,9 +98,8 @@ function draw() {
 
 }
 
-////'https://cs30.wmcicompsci.ca/oop/overview.html
 
-//Displays menu screen:
+//Menu screen:
 function displayMenu() {
   //Menu Outline:
   rectMode(CENTER);
@@ -93,18 +107,22 @@ function displayMenu() {
   rect(width/2, height/2, 300, menuHeight);
 
   //Menu Buttons:
+  let counter = 0;
+
   fill(255);
   for (let i=150; i<=menuHeight ; i+= 75) {
-    rect(buttonX, i, buttonWidth, buttonHeight);
-    fill(100);
-    text(menuButtonNames, width/2 - buttonWidth/3, i + 10);
-    fill(255);
+    rect(buttonX, i, this.buttonWidth, this.buttonHeight);
+    fill(100); //Sets color to gray for button text.
+    
+    //Print the correct button name from the list of button names to each button.
+    text(menuButtonNames[counter], width/2 - this.buttonWidth/3, i + 10);
+    counter = counter + 1;
+    fill(255); //Sets color back to white for the rest of the buttons. 
   }
 }
 
 
-
-//Displays the paint program screen:
+//Paint program screen:
 function displayPaintScreen() {
   let backButtonX = windowWidth - (backButtonWidth+40);
   let backButtonY = windowHeight - backButtonHeight;
@@ -171,15 +189,15 @@ function clickedOnColor(x, y) {
 
 
 
-//define button x and y:
 function clickedOnButton(x, y) {
   if (state === "menu"){
-    return x >= buttonX - buttonWidth/2 &&
-           x <= buttonX + buttonWidth/2 &&
-           y >= 225 - buttonHeight/2 &&
-           y <= 225 + buttonHeight/2;
+    return x >= buttonX - this.buttonWidth/2 &&
+           x <= buttonX + this.buttonWidth/2 &&
+           y >= 225 - this.buttonHeight/2 &&
+           y <= 225 + this.buttonHeight/2;
   }
 }
+
 
 function clickedOnBackButton(x, y) {
   if (state === "paint"){
