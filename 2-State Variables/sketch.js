@@ -111,11 +111,11 @@ function displayMenu() {
 
   fill(255);
   for (let i=150; i<=menuHeight ; i+= 75) {
-    rect(buttonX, i, this.buttonWidth, this.buttonHeight);
+    rect(buttonX, i, myButton.buttonWidth, myButton.buttonHeight);
     fill(100); //Sets color to gray for button text.
     
     //Print the correct button name from the list of button names to each button.
-    text(menuButtonNames[counter], width/2 - this.buttonWidth/3, i + 10);
+    text(menuButtonNames[counter], width/2 - myButton.buttonWidth/3, i + 10);
     counter = counter + 1;
     fill(255); //Sets color back to white for the rest of the buttons. 
   }
@@ -153,6 +153,10 @@ function displayPaintScreen() {
   fill(0);
   textSize(30);
   text("Back to Menu", backButtonX, backButtonY);
+
+  //Mouse:
+  fill(230, 150, 10, 100);
+  ellipse(mouseX, mouseY, 25);
 }
 
 
@@ -191,10 +195,10 @@ function clickedOnColor(x, y) {
 
 function clickedOnButton(x, y) {
   if (state === "menu"){
-    return x >= buttonX - this.buttonWidth/2 &&
-           x <= buttonX + this.buttonWidth/2 &&
-           y >= 225 - this.buttonHeight/2 &&
-           y <= 225 + this.buttonHeight/2;
+    return x >= buttonX - myButton.buttonWidth/2 &&
+           x <= buttonX + myButton.buttonWidth/2 &&
+           y >= 225 - myButton.buttonHeight/2 &&
+           y <= 225 + myButton.buttonHeight/2;
   }
 }
 
