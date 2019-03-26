@@ -4,11 +4,15 @@
 //
 // State Variable Feature:
 // I utilize the state variable: 'state' in creating the menu part of my program. If state = "menu", the 
-// screen will diplay the menu. If state = "paint" (when the paint-button is clicked), the screen will 
-// display the paint program.
+// screen will diplay the menu. If state = "paint" (when the paint-option button is clicked), the screen 
+// will display the paint program.
 // 
 // Extra for Experts: describe what you did to take this project "above and beyond".
-// - I experimented with translate / rotate in my program. 
+//    1) I utilized classes to create my menu buttons, thereby making my code much more conceise in checking
+//       for button-clicks. Although the Buttons class served as the basic template for all buttons, I also 
+//       found a way to give each button its own name, and y-position. 
+//    2) I also experimented with translate / rotate in my program. 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
 //State variable for calling menu screen or other program:
@@ -18,12 +22,13 @@ let state;
 let fontSize = 30;
 
 //Menu outline variable:
-let menuHeight = 550;
-
-//Menu-button names:
-/////let menuButtonNames = ["Button 1", "Paint", "Button 3", "Button 4", "Button 5", "Button 6"];
+let menuHeight = 400;
 
 let button1 = [];
+
+let someName = "";
+
+
 
 
 function setup() {
@@ -34,22 +39,21 @@ function setup() {
   //Start screen will always open with menu:
   state = "menu";
 
-  let someName = "";
-
   //Make 3 buttons:
-  for (let numberOfButtons = 1; numberOfButtons < 4; numberOfButtons++) {
-    if (numberOfButtons === 1) {
+  for (let numberOfButtons = 2; numberOfButtons < 5; numberOfButtons++) {
+    if (numberOfButtons === 2) {
       someName = "Button 1";
     }
-    if (numberOfButtons === 2) {
+    if (numberOfButtons === 3) {
       someName = "Button 2";
     }
-    if (numberOfButtons === 3) {
+    if (numberOfButtons === 4) {
       someName = "Button 3";
     }
-    button1[numberOfButtons] = new Buttons(windowWidth/2, numberOfButtons*90, someName);
+    button1[numberOfButtons] = new Buttons(windowWidth/2, numberOfButtons*100, someName);
   }
 }
+
 
 
 
@@ -92,7 +96,20 @@ function draw() {
     //Display paint screen:
     displayPaintScreen();
   }
+  else if (state === "none") {
+    //Display alternative screen:
+    displayNoneScreen();
+  }
 }
+
+
+
+
+function displayNoneScreen() {
+  backgorund(0);
+}
+
+
 
 
 //Menu screen:
@@ -103,21 +120,12 @@ function displayMenu() {
   rect(width/2, height/2, 300, menuHeight);
 
   //Show each of the 3 buttons:
-  for (let numberOfButtons = 1; numberOfButtons < 4; numberOfButtons++) {
+  for (let numberOfButtons = 2; numberOfButtons < 5; numberOfButtons++) {
     button1[numberOfButtons].show();
   }
+}
 
-  //Menu Buttons:
-  ////let counter = 0;
 
-    //...rect(buttonX, i, myButton.buttonWidth, myButton.buttonHeight);
-    /////fill(100); //Sets color to gray for button text.
-    
-    //Print the correct button name from the list of button names to each button.
-    /////text(menuButtonNames[counter], width/2 - button1.buttonWidth/3, i + 10);
-    ////counter = counter + 1;
-    ////fill(255); //Sets color back to white for the rest of the buttons. 
-  }
 
 
 //Paint program screen:
@@ -141,28 +149,28 @@ function displayPaintScreen() {
 function mousePressed () {
   if (state === "menu") {
     if (clickedOnButton(mouseX, mouseY)) {
-      state = "paint";
+        state = "paint";
     }
+    console.log(state, button1[2].buttonY, button1[3].buttonY);
   }
 }
 
-//for (let i=150; i<=menuHeight ; i+= 75) {
-  //buttons[i] = new Buttons();
 
+/////////////////fix the fact that the x cack does not work with the other two:
 function clickedOnButton(x, y) {
   if (state === "menu") {
-    for (let numberOfButtons = 1; numberOfButtons < 4; numberOfButtons++) {
+    for (let numberOfButtons = 2; numberOfButtons < 5; numberOfButtons++) {
       return x >= button1[numberOfButtons].buttonX - button1[numberOfButtons].buttonWidth/2 &&
             x <= button1[numberOfButtons].buttonX + button1[numberOfButtons].buttonWidth/2 &&
-
-            y >= button1[1].buttonY  - button1[1].buttonHeight/2 &&
-            y <= button1[1].buttonY + button1[1].buttonHeight/2 ||
 
             y >= button1[2].buttonY  - button1[2].buttonHeight/2 &&
             y <= button1[2].buttonY + button1[2].buttonHeight/2 ||
 
             y >= button1[3].buttonY  - button1[3].buttonHeight/2 &&
-            y <= button1[3].buttonY + button1[3].buttonHeight/2;
+            y <= button1[3].buttonY + button1[3].buttonHeight/2 ||
+
+            y >= button1[4].buttonY  - button1[4].buttonHeight/2 &&
+            y <= button1[4].buttonY + button1[4].buttonHeight/2;
     }
   }
 }
