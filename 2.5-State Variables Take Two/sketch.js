@@ -212,7 +212,7 @@ function displayScreen2() {
 
 // Program 3 Screen (scrolling background):
 function displayScreen3() {
-  background(0);
+  background(20, 50, 80);
 
   // Translates canvas left by the avatar's x-position, giving the effect of a 'scrolling' background as the avatar 'moves forward'.
   translate(-person.position.x, 0);
