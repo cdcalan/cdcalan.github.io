@@ -11,10 +11,18 @@ let grid;
 let cellSize;
 
 function setup() {
-  createCanvas(windowWidth, windowHeight);
+  if (windowWidth > windowHeight) {
+    createCanvas(windowHeight, windowHeight);
+  }
+  if (windowWidth < windowHeight) {
+    createCanvas(windowWidth, windowWidth);
+  }
+
   grid = createRandom2DArray(gridSize, gridSize);
+  //grid = create2DArray(gridSize, gridSize);
   cellSize = width/gridSize;
 }
+
 
 function draw() {
   background(220);
@@ -60,12 +68,79 @@ function createRandom2DArray(itsColumns, itsRows) {
     for (let j = 0; j < itsColumns; j++){
       // half the time, push in a 0 value, while half the time push in a 1. 
       if (random(100) < 50) {
-        emptyArray.push(0);
+        emptyArray[i].push(0);
       }
       else {
-        emptyArray.push(1);
+        emptyArray[i].push(1);
       }
     }
   }
   return emptyArray;
+}
+
+
+function update() {
+  let nextTurn = create2DArray(gridSize, gridSize);
+
+  for (let y = 0; y < gridSize; y++) {
+    for (let x = 0; x < gridSize; x++) {
+      let neighbors = 0;
+
+      // look at the 3 by 3 grid around th euctrent location 
+      for (let i = -1; i <= 1; i++) {
+        for (let j = -1; j <= 1; j++) {
+          if (y+i >= 0 && y+1 < gridSize && x+j >= 0 && x+j < gridSize) {
+            neighbors += grid[y+i][x+j];
+          }
+        }
+      }
+
+      neighbors -= grid[y][x]; // if dead, takign away 1 doesnt matter. if alive, it'll take away the 1 extra neighbor we do not have/need.
+      
+      //applying the rules of the game:
+      if (grid[y][x] === 1) {     //alive
+        if (neighbors === 2 || neighbors === 3) {
+          nextTurn[y][x] = 1;
+        }
+        else {
+          nextTurn[y][x] = 0;
+        }
+      }
+
+
+      if (grid[y][x] === 0) {    //dead
+        if (neighbors === 3) {
+          nextTurn[y][x] = 1;
+        }
+        else {
+          nextTurn[y][x] = 0;
+        }
+      }
+    }
+  }
+
+  grid = nextTurn;
+}
+
+
+function keyPressed() {
+  if (key === " ") {
+    update();
+  }
+  if (key === "r") {
+    grid = create2DArray(gridSize, gridSize);
+  }
+}
+
+
+function mousePressed() {
+  let xcoord = floor(mouseX / cellSize);
+  let ycoord = floor(mouseY / cellSize);
+
+  if (grid[ycoord][xcoord] === 1) {
+    grid[ycoord][xcoord] = 0;
+  }
+  else {
+    grid[ycoord][xcoord] = 1;
+  }
 }
