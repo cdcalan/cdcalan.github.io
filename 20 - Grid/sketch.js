@@ -6,9 +6,10 @@
 // - describe what you did to take this project "above and beyond"
 
 
-let gridSize = 10;
+let gridSize = 50;
 let grid;
 let cellSize;
+let autoPlay;
 
 function setup() {
   if (windowWidth > windowHeight) {
@@ -125,11 +126,30 @@ function update() {
 
 function keyPressed() {
   if (key === " ") {
+    window.clearInterval(autoPlay);
     update();
   }
-  if (key === "r") {
+  if (key === "c") {                           // clear the grid
     grid = create2DArray(gridSize, gridSize);
   }
+  if (key === "r") {                           // reset the grid. (get new grid)
+    grid = createRandom2DArray(gridSize, gridSize);
+  }
+  if (key === "a") {                           // auto-play
+    autoPlay = window.setInterval(update, 50);
+  }
+  if (key === "s") {                           // save the current grid. json stands for javascript object notation. 
+    saveJSON(grid, "thegrid.json");            // save json          
+  }
+  if (key === "g") {
+    noLoop();
+    grid = loadJSON("assets/thegrid(2).json", loadingComplete);    //load json
+  }
+}
+
+
+function loadingComplete() {
+  loop();
 }
 
 
@@ -144,3 +164,11 @@ function mousePressed() {
     grid[ycoord][xcoord] = 1;
   }
 }
+
+//battleship
+//tetrus, bejewled
+//catch the blocks (raining down) / catch the correct food for teh recepie.
+//connect 4
+//frogger / cross the road to get somehting and back again without gettin ghit by cars, u have 3 lives
+//maze game with levels that have json files that make more difficult mazes
+//sudoku
