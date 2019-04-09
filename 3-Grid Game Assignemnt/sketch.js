@@ -1,12 +1,27 @@
-// Project Title
-// Your Name
-// Date
+// Project Title: Grid-Based Game
+// Alina Sami
+// Date: April 9, 2019
+//
+//*******************************************************************
+// HELP: https://www.khanacademy.org/computing/computer-programming/programming-games-visualizations/memory-game/a/grid-of-tiles
+//
+/////////memory matching game
+//////////store
+////////battleship
+////////connect 4
+////////frogger / cross the road to get somehting and back again without gettin ghit by cars, u have 3 lives
+////////tictactoe
+//tetrus, bejewled
+//catch the blocks (raining down) / catch the correct food for teh recepie.
+//maze game with levels that have json files that make more difficult mazes
+//sudoku
+//********************************************************************
 //
 // Extra for Experts:
 // - describe what you did to take this project "above and beyond"
 
 
-let gridSize = 50;
+let gridSize = 5;
 let grid;
 let cellSize;
 let autoPlay;
@@ -163,4 +178,6 @@ function mousePressed() {
   else {
     grid[ycoord][xcoord] = 1;
   }
+
+  //if (grid[ycoord][xcoord]) // check position in the grid
 }

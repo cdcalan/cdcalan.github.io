@@ -164,12 +164,3 @@ function mousePressed() {
     grid[ycoord][xcoord] = 1;
   }
 }
-
-//////battleship//
-//tetrus, bejewled
-//catch the blocks (raining down) / catch the correct food for teh recepie.
-//////connect 4
-//////frogger / cross the road to get somehting and back again without gettin ghit by cars, u have 3 lives
-//////tictactoe
-//maze game with levels that have json files that make more difficult mazes
-//sudoku
