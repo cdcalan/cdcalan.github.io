@@ -26,6 +26,7 @@ let grid;
 let cellSize;
 let autoPlay;
 
+
 function setup() {
   if (windowWidth > windowHeight) {
     createCanvas(windowHeight, windowHeight);
@@ -47,8 +48,8 @@ function draw() {
 
 
 function displayGrid() {
-  for (let y = 0; y < gridSize; y++) {
-    for (let x = 0; x < gridSize; x++) {
+  for (let y = 0; y < gridSize; y++) {                             // columns?
+    for (let x = 0; x < gridSize; x++) {                           // rows?
       if (grid[y][x] === 0) {   //order matters for [y][x]. 
         fill(255);
       }
