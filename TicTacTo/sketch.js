@@ -2,6 +2,10 @@
 // Your Name
 // Date
 //
+//*************************************************************************************** 
+// HELP: https://medium.com/front-end-weekly/tic-tac-toe-javascript-game-b0cd6e98edd9
+//*************************************************************************************** 
+//
 // Extra for Experts:
 // - describe what you did to take this project "above and beyond"
 

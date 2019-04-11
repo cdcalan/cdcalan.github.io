@@ -45,9 +45,9 @@ function draw() {
 }
 
 // function theGrid() {
-  for (let y = 0; y <) {
-    for (let x = 0; x <) {
+  //for (let y = 0; y <) {
+    //for (let x = 0; x <) {
 
-    }
-  }
-}
+    //}
+  //}
+//}
