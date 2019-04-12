@@ -9,20 +9,22 @@
 // - NEED TO USE:
 //      - playSound();
 //      - millis();
-
+// deal with all the movements nad ocllisions before the display in the draw loop when making a class. 
 
 
 // the variable name for tile templates;
-let gameTile;
+let gameTiles = [];
+
 // Empty array stores all the tiles used in the game. 
-let tilesList = [];
+////let tilesList = [];
+
 // Template tile: 
 class Tile {
   constructor(x, y) {
     this.x = x;
     this.y = y;
-    this.width = 50;
-    this.height = 30;
+    this.width = 100;
+    this.height = 75;
     this.image = false;            // figure out
     this.isFaceUp = false;         // to do
   }
@@ -34,20 +36,22 @@ class Tile {
 
 }
 
+
 function setup() {
   createCanvas(windowWidth, windowHeight);
-  gameTile = new Tile(150, 150);
+  console.log(windowWidth/5);
+  for (let i = 0; i < 25; i++) {
+    for (let d = windowWidth/5; d < windowWidth; d += 10) {
+      let someTile = new Tile(d, d);
+      gameTiles.push(someTile);
+    }
+  }
 }
 
 function draw() {
   background(220);
-  gameTile.show();
+
+  for (let i = 0; i < gameTiles.length; i++) {
+    gameTiles[i].show();
+  }
 }
-
-// function theGrid() {
-  //for (let y = 0; y <) {
-    //for (let x = 0; x <) {
-
-    //}
-  //}
-//}
