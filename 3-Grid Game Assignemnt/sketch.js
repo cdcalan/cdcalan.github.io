@@ -144,7 +144,7 @@ function update() {
 }
 
 
-function keyPressed() {
+function keyPressed() {  ///////create a similar mousepressed function for tiles:
   if (key === " ") {
     window.clearInterval(autoPlay);
     update();
@@ -165,6 +165,11 @@ function keyPressed() {
     noLoop();
     grid = loadJSON("assets/thegrid(2).json", loadingComplete);    //load json
   }
+}
+function mousePressed() {
+ // if (mouseX >= gameTiles[i].x && mouseX <= gameTiles[i].x + gameTiles[i].width)
+      //image = (...)
+      // return image;
 }
 
 

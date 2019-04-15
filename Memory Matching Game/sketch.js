@@ -27,24 +27,48 @@ class Tile {
     this.height = 75;
     this.image = false;            // figure out
     this.isFaceUp = false;         // to do
+
+    this.Timer = new Timer(1000); //waits for one second. 
   }
 
   show() {
-    fill(200, 100, 150);
-    rect(this.x, this.y, this.width, this.height, 10);
+    if (!this.Timer.isDone()) {
+      fill(200, 100, 150);
+      rect(this.x, this.y, this.width, this.height, 10);
+    }
   }
 
 }
+
+
+
+class Timer {
+  constructor(timeToWait){
+    this.timeToWait = timeToWait;  //user set time.
+    this.hasrun = false;
+  }
+
+  isDone() {
+    return millis() >= this.endTime;
+  }
+
+  restart() {
+    this.startTime = millis(); //the start time is whatever the milis are right now.
+    this.hasrun = true;
+    this.startTime = millis();  // measures when the window opened.
+    this.endTime = this.startTime + this.timeToWait; //end time is whenever u started plus th etime u were told to wait.
+  }
+}
+
 
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
   console.log(windowWidth/5);
   for (let i = 0; i < 25; i++) {
-    for (let d = windowWidth/5; d < windowWidth; d += 10) {
-      let someTile = new Tile(d, d);
-      gameTiles.push(someTile);
-    }
+    let someTile = new Tile(i, i);
+    gameTiles.push(someTile);
+    console.log(i);
   }
 }
 
