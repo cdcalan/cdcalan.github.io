@@ -64,13 +64,18 @@ class Timer {
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
-  console.log(windowWidth/5);
   for (let i = 0; i < 25; i++) {
-    let someTile = new Tile(i, i);
-    gameTiles.push(someTile);
-    console.log(i);
-  }
+    let someTile = new Tile(0, 0);
+    for (let i = 0; i < 5; i++) {      //as we are going "across the array"....
+      gameTiles.push(someTile);
+      for (let j = 0; j < 5; j++){ 
+        gameTiles[i].push(someTile);
+      }
+    }
+  return gameTiles;
 }
+
+
 
 function draw() {
   background(220);
