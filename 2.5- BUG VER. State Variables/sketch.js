@@ -13,7 +13,23 @@
 ////////////////////////////use time minis(), use screen sliding, use a rotating object. 
 ///////////////////////////let name = prompt("what's you name?"); --> stops the rest of your program so use it in setup. 
 ///////////////////////////////'https://cs30.wmcicompsci.ca/oop/overview.html
+//
+//
+//
+//
+//***********************************************************************************
+//create sliders
+//creat screen sliding windows
+//make paint files be able to save on computer.
+//make buttons change color when hovered over
+//create a mini map - move around the screen
+//flappybird style game with jumping, etc. 
+//uylitpmate trafic light simulator
+//curser changes based on what it is hovering over.
 
+//an object is just a container of properties and etc.
+//https://p5js.org/examples/objects-array-of-objects.html
+//***********************************************************************************
 
 
 

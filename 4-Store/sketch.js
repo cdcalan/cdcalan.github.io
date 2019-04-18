@@ -6,16 +6,19 @@
 // HELP: https://www.khanacademy.org/computing/computer-programming/programming-games-visualizations/memory-game/a/grid-of-tiles
 //
 /////////memory matching game
-//////////store
+//////////STORE
 ////////battleship
 ////////connect 4
-////////frogger / cross the road to get somehting and back again without gettin ghit by cars, u have 3 lives
+////////FROGGER / cross the road to get somehting and back again without gettin ghit by cars, u have 3 lives
 ////////tictactoe
 //tetrus, bejewled
 //catch the blocks (raining down) / catch the correct food for teh recepie.
 //maze game with levels that have json files that make more difficult mazes
 //sudoku
 //********************************************************************
+//*************************************************************************************** 
+// TICTAC HELP: https://medium.com/front-end-weekly/tic-tac-toe-javascript-game-b0cd6e98edd9
+//*************************************************************************************** 
 //
 // Extra for Experts:
 // - describe what you did to take this project "above and beyond"
