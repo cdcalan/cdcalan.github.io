@@ -6,19 +6,16 @@
 // HELP: https://www.khanacademy.org/computing/computer-programming/programming-games-visualizations/memory-game/a/grid-of-tiles
 //
 /////////memory matching game
-//////////STORE
+//////////store
 ////////battleship
 ////////connect 4
-////////FROGGER / cross the road to get somehting and back again without gettin ghit by cars, u have 3 lives
+////////frogger / cross the road to get somehting and back again without gettin ghit by cars, u have 3 lives
 ////////tictactoe
 //tetrus, bejewled
 //catch the blocks (raining down) / catch the correct food for teh recepie.
 //maze game with levels that have json files that make more difficult mazes
 //sudoku
 //********************************************************************
-//*************************************************************************************** 
-// TICTAC HELP: https://medium.com/front-end-weekly/tic-tac-toe-javascript-game-b0cd6e98edd9
-//*************************************************************************************** 
 //
 // Extra for Experts:
 // - describe what you did to take this project "above and beyond"
@@ -28,51 +25,35 @@
 // > play around with the html of your index.html page. You can make it so that your canvas only takes up a portion of your page, or happens "behind" the rest of the content on your webpage.
 // > include basic AI / beating a computer mode in your game (could be as simple as an enemy that tries to catch the player, or something more involved, such as a computer opponent in a game like Tic Tac Toe)
 
-// Building the store-grid:
-let gridAcross = 3;
-let gridDown = 2;
+let gridSize = 5;
 let grid;
 let cellSize;
-
-// Displayed inventory stats:
-let fontSize = 35;
-let playerMoney;
-let inventoryList = ["object 1", "object 2", "object 3"];
+let autoPlay;
 
 
 function setup() {
   if (windowWidth > windowHeight) {
-    let canvasHeight = windowHeight;
-    createCanvas(canvasHeight*1.5, canvasHeight*1.5);
+    createCanvas(windowHeight, windowHeight);
   }
   if (windowWidth < windowHeight) {
-    let canvasWidth = windowWidth;
-    createCanvas(canvasWidth*1.5, canvasWidth*1.5);
+    createCanvas(windowWidth, windowWidth);
   }
 
-  grid = create2DArray(gridDown, gridAcross);
-  cellSize = canvasHeight/gridAcross;
-
-  textSize(fontSize);
-  playerMoney = 1000;
+  grid = createRandom2DArray(gridSize, gridSize);
+  //grid = create2DArray(gridSize, gridSize);
+  cellSize = width/gridSize;
 }
 
 
 function draw() {
   background(220);
   displayGrid();
-
-  // Instructions and stats displayed on-screen for inventory:
-  fill(0);
-  text("Click on item to buy!", 25, cellSize*2+fontSize);
-  text("Money: $" + playerMoney, 25, cellSize*2+fontSize*3);
-  text("Inventory: " + inventoryList, 25, cellSize*2+fontSize*4);
 }
 
 
 function displayGrid() {
-  for (let y = 0; y < gridDown; y++) {                             // columns?
-    for (let x = 0; x < gridAcross; x++) {                           // rows?
+  for (let y = 0; y < gridSize; y++) {                             // columns?
+    for (let x = 0; x < gridSize; x++) {                           // rows?
       if (grid[y][x] === 0) {   //order matters for [y][x]. 
         fill(255);
       }
@@ -99,17 +80,37 @@ function create2DArray(itsColumns, itsRows) {
 }
 
 
-function update() {
-  let nextTurn = create2DArray(gridDown, gridAcross);
+function createRandom2DArray(itsColumns, itsRows) {
+  //first thing we do is come up with a variable name:
+  let emptyArray = [];
+  //now create a for loop as second step:
+  for (let i = 0; i < itsRows; i++) {      //as we are going "across the array"....
+    emptyArray.push([]);
+    for (let j = 0; j < itsColumns; j++){
+      // half the time, push in a 0 value, while half the time push in a 1. 
+      if (random(100) < 50) {
+        emptyArray[i].push(0);
+      }
+      else {
+        emptyArray[i].push(1);
+      }
+    }
+  }
+  return emptyArray;
+}
 
-  for (let y = 0; y < gridDown; y++) {
-    for (let x = 0; x < gridAcross; x++) {
+
+function update() {
+  let nextTurn = create2DArray(gridSize, gridSize);
+
+  for (let y = 0; y < gridSize; y++) {
+    for (let x = 0; x < gridSize; x++) {
       let neighbors = 0;
 
       // look at the 3 by 3 grid around th euctrent location 
       for (let i = -1; i <= 1; i++) {
         for (let j = -1; j <= 1; j++) {
-          if (y+i >= 0 && y+1 < gridDown && x+j >= 0 && x+j < gridAcross) {
+          if (y+i >= 0 && y+1 < gridSize && x+j >= 0 && x+j < gridSize) {
             neighbors += grid[y+i][x+j];
           }
         }
@@ -143,6 +144,39 @@ function update() {
 }
 
 
+function keyPressed() {  ///////create a similar mousepressed function for tiles:
+  if (key === " ") {
+    window.clearInterval(autoPlay);
+    update();
+  }
+  if (key === "c") {                           // clear the grid
+    grid = create2DArray(gridSize, gridSize);
+  }
+  if (key === "r") {                           // reset the grid. (get new grid)
+    grid = createRandom2DArray(gridSize, gridSize);
+  }
+  if (key === "a") {                           // auto-play
+    autoPlay = window.setInterval(update, 50);
+  }
+  if (key === "s") {                           // save the current grid. json stands for javascript object notation. 
+    saveJSON(grid, "thegrid.json");            // save json          
+  }
+  if (key === "g") {
+    noLoop();
+    grid = loadJSON("assets/thegrid(2).json", loadingComplete);    //load json
+  }
+}
+function mousePressed() {
+ // if (mouseX >= gameTiles[i].x && mouseX <= gameTiles[i].x + gameTiles[i].width)
+      //image = (...)
+      // return image;
+}
+
+
+function loadingComplete() {
+  loop();
+}
+
 
 function mousePressed() {
   let xcoord = floor(mouseX / cellSize);
@@ -150,11 +184,6 @@ function mousePressed() {
 
   if (grid[ycoord][xcoord] === 1) {
     grid[ycoord][xcoord] = 0;
-    if (playerMoney > 0){                 // As long as player has more than $0, let player shop (subtract money and add to inventory).
-      playerMoney -= 50; 
-      inventoryList.push("another object");
-      console.log(inventoryList);
-    }
   }
   else {
     grid[ycoord][xcoord] = 1;

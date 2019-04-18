@@ -11,52 +11,63 @@
 // > include basic AI / beating a computer mode in your game (could be as simple as an enemy that tries to catch the player, or something more involved, such as a computer opponent in a game like Tic Tac Toe)
 
 let grid;
-let gridColums = 6;
-let gridRows = 6;
+let gridColumns;
+let gridRows;
+let w = 20;
 
-let cellState;  // safe or dangerous (bool)
-let xCell, yCell, wCell, hCell;
-let revealedState; // Danger, number, blank. 
+// let cellState;  // safe or dangerous (bool)
+// let revealedState; // Danger, number, blank. 
 
-
+///////////////////////////////////////////////
 class Cell {
-  constructor () {
+  constructor (x, y, w) {
+    this.x;
+    this.y;
+    this.w;
     this.turtle = true;
     this.visible = true; 
+  }
+  show() {
+    fill(100, 200, 50);
+    rect(this.x, this.y, this.w, this.w);
   }
 }
 
 
-function create2DArray () {
-  let emptyArray = [];
-  for (let i = 0; i < gridColums; i++) {
-    emptyArray.push([]);
-    for (let j = 0; j < gridRows; j++) {
-      emptyArray[i].push([]);
-    }
+function create2DArray (gridColumns, gridRows) {
+  let emptyArray = new Array(gridColumns);
+  for (let i = 0; i < emptyArray.length; i++) {
+    emptyArray[i] = new Array(gridRows);
+    // console.log(emptyArray.length); ///////////////////////////////////
+    // for (let j = 0; j < gridRows; j++) {
+    //   emptyArray[i].push([]); 
+    //   console.log(emptyArray);///////////////////////////////
+    //}
   }
   return emptyArray;
 }
 
 
 function setup() {
-  createCanvas(windowWidth, windowHeight);
-  grid = create2DArray(gridColums, gridRows);
-
+  createCanvas(500, 500); //////////////////////////change to window width and height later, and check for max. 
+  gridColumns = floor(width/w);
+  gridRows = floor(height/w);
+  grid = create2DArray(gridColumns, gridRows); ///////////////////
+  for (let i = 0; i < gridColumns; i++) {                             // columns?
+    for (let j = 0; j < gridRows; j++) {                           // rows?
+      grid[i][j] = new Cell(i*w, j*w, w);   
+    }
+  }
+  console.log("hi");
 }
 
 
 function draw() {
-  background(150);
-  displayGrid();
-}
-
-
-function displayGrid() {
-  for (let y = 0; y < gridRows; y++) {                             // columns?
-    for (let x = 0; x < gridColumns; x++) {                           // rows?
-      grid[y][x] = new Cell();   
-
+  background(50, 100, 150);
+  for (let i = 0; i < gridColumns; i++) {                             // columns?
+    for (let j = 0; j < gridRows; j++) {                           // rows?
+      grid[i][j].show();   
     }
   }
+  console.log("hello");
 }
