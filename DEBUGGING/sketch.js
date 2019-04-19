@@ -25,10 +25,17 @@
 // > play around with the html of your index.html page. You can make it so that your canvas only takes up a portion of your page, or happens "behind" the rest of the content on your webpage.
 // > include basic AI / beating a computer mode in your game (could be as simple as an enemy that tries to catch the player, or something more involved, such as a computer opponent in a game like Tic Tac Toe)
 
-let gridSize = 5;
+let gridSize = 3;
 let grid;
 let cellSize;
 let autoPlay;
+
+let counter = 0;
+
+////////////////////////////////////////
+let cellValue;
+
+let emptyArray = [];
 
 
 function setup() {
@@ -39,10 +46,13 @@ function setup() {
     createCanvas(windowWidth, windowWidth);
   }
 
-  grid = createRandom2DArray(gridSize, gridSize);
-  //grid = create2DArray(gridSize, gridSize);
+  grid = create2DArray(gridSize, gridSize);
   cellSize = width/gridSize;
+  cellValue = 0; ///////////////////////////////////////////
+  
 }
+
+
 
 
 function draw() {
@@ -51,51 +61,41 @@ function draw() {
 }
 
 
+
+
 function displayGrid() {
-  for (let y = 0; y < gridSize; y++) {                             // columns?
-    for (let x = 0; x < gridSize; x++) {                           // rows?
-      if (grid[y][x] === 0) {   //order matters for [y][x]. 
+  for (let y = 0; y < gridSize; y++) {                             
+    for (let x = 0; x < gridSize; x++) {    
+
+      // If cell is a player 1 value, display a red cell:
+      if (grid[y][x] === 1 && mousePressed) {   
+        fill(255, 0, 0);
+      }
+
+      // If cell is a player 2 value, display a blue cell:
+      if (grid[y][x] === 2) {   
+        fill(0, 0, 255);
+      }
+
+      // If cell value is 0, display an empty cell:
+      else {
         fill(255);
       }
-      else {
-        fill(0);
-      }
+
       rect(x*cellSize, y*cellSize, cellSize, cellSize);
     }
   }
 }
 
 
-function create2DArray(itsColumns, itsRows) {
-  //first thing we do is come up with a variable name:
-  let emptyArray = [];
-  //now create a for loop as second step:
-  for (let i = 0; i < itsRows; i++) {      //as we are going "across the array"....
+function create2DArray(gridSize, gridSize) {
+  for (let i = 0; i < gridSize; i++) {      
     emptyArray.push([]);
-    for (let j = 0; j < itsColumns; j++){
+    for (let j = 0; j < gridSize; j++){
       emptyArray[i].push(0);
     }
   }
-  return emptyArray;
-}
-
-
-function createRandom2DArray(itsColumns, itsRows) {
-  //first thing we do is come up with a variable name:
-  let emptyArray = [];
-  //now create a for loop as second step:
-  for (let i = 0; i < itsRows; i++) {      //as we are going "across the array"....
-    emptyArray.push([]);
-    for (let j = 0; j < itsColumns; j++){
-      // half the time, push in a 0 value, while half the time push in a 1. 
-      if (random(100) < 50) {
-        emptyArray[i].push(0);
-      }
-      else {
-        emptyArray[i].push(1);
-      }
-    }
-  }
+  console.log(emptyArray);
   return emptyArray;
 }
 
@@ -107,7 +107,7 @@ function update() {
     for (let x = 0; x < gridSize; x++) {
       let neighbors = 0;
 
-      // look at the 3 by 3 grid around th euctrent location 
+      // look at the 3 by 3 grid around the current location 
       for (let i = -1; i <= 1; i++) {
         for (let j = -1; j <= 1; j++) {
           if (y+i >= 0 && y+1 < gridSize && x+j >= 0 && x+j < gridSize) {
@@ -116,7 +116,7 @@ function update() {
         }
       }
 
-      neighbors -= grid[y][x]; // if dead, takign away 1 doesnt matter. if alive, it'll take away the 1 extra neighbor we do not have/need.
+      //********************** */neighbors -= grid[y][x]; // if dead, takign away 1 doesnt matter. if alive, it'll take away the 1 extra neighbor we do not have/need.
       
       //applying the rules of the game:
       if (grid[y][x] === 1) {     //alive
@@ -128,17 +128,18 @@ function update() {
         }
       }
 
-
-      if (grid[y][x] === 0) {    //dead
-        if (neighbors === 3) {
-          nextTurn[y][x] = 1;
-        }
-        else {
-          nextTurn[y][x] = 0;
-        }
-      }
     }
   }
+  //     if (grid[y][x] === 0) {    //dead
+  //       if (neighbors === 3) {
+  //         nextTurn[y][x] = 1;
+  //       }
+  //       else {
+  //         nextTurn[y][x] = 0;
+  //       }
+  //     }
+  //   }
+  // }
 
   grid = nextTurn;
 }
@@ -152,24 +153,12 @@ function keyPressed() {  ///////create a similar mousepressed function for tiles
   if (key === "c") {                           // clear the grid
     grid = create2DArray(gridSize, gridSize);
   }
-  if (key === "r") {                           // reset the grid. (get new grid)
-    grid = createRandom2DArray(gridSize, gridSize);
-  }
   if (key === "a") {                           // auto-play
     autoPlay = window.setInterval(update, 50);
   }
   if (key === "s") {                           // save the current grid. json stands for javascript object notation. 
     saveJSON(grid, "thegrid.json");            // save json          
   }
-  if (key === "g") {
-    noLoop();
-    grid = loadJSON("assets/thegrid(2).json", loadingComplete);    //load json
-  }
-}
-function mousePressed() {
- // if (mouseX >= gameTiles[i].x && mouseX <= gameTiles[i].x + gameTiles[i].width)
-      //image = (...)
-      // return image;
 }
 
 
@@ -182,12 +171,51 @@ function mousePressed() {
   let xcoord = floor(mouseX / cellSize);
   let ycoord = floor(mouseY / cellSize);
 
-  if (grid[ycoord][xcoord] === 1) {
-    grid[ycoord][xcoord] = 0;
+  console.log(grid);
+
+
+  if (grid[ycoord][xcoord] === 0) { // if spot is empty
+    grid[ycoord][xcoord] = 1;       // make user click fill the spot
   }
-  else {
-    grid[ycoord][xcoord] = 1;
-  }
+  counter++;
+  console.log("Counter " + counter);
+  // else {
+  //   grid[ycoord][xcoord] = 1;
+  // }
 
   //if (grid[ycoord][xcoord]) // check position in the grid
+}
+
+
+
+// Check to see for win:
+function hasWon() {
+  // Horizontal checks:
+  if (grid[0][0] !== 0 && grid[0][0] === grid[0][1] && grid[0][1] === grid[0][2]) {
+    return true;
+  }
+  if (grid[1][0] !== 0 && grid[1][0] === grid[1][1] && grid[1][1] === grid[1][2]) {
+    return true;
+  }
+  if (grid[2][0] !== 0 && grid[2][0] === grid[2][1] && grid[2][1] === grid[2][2]) {
+    return true;
+  }
+  // Vertical Checks:
+  if (grid[0][0] !== 0 && grid[0][0] === grid[1][0] && grid[1][0] === grid[2][0]) {
+    return true;
+  }
+  if (grid[0][1] !== 0 && grid[0][1] === grid[1][1] && grid[1][1] === grid[2][1]) {
+    return true;
+  }
+  if (grid[0][2] !== 0 && grid[0][2] === grid[1][2] && grid[1][2] === grid[2][2]) {
+    return true;
+  }
+  // Diagonal Checks:
+  if (grid[0][0] !== 0 && grid[0][0] === grid[1][1] && grid[1][1] === grid[2][2]) {
+    return true;
+  }
+  if (grid[0][2] !== 0 && grid[0][2] === grid[1][1] && grid[1][1] === grid[2][0]) {
+    return true;
+  }
+  return false; //If none of the checks have been created, hasWon() is false. 
 }
