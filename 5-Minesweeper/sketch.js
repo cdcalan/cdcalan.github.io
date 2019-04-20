@@ -20,7 +20,20 @@ let w = 50;
 let canvasSize;
 
 let treasure = 0;
-let life = 3;
+let lives = 3;
+
+
+let counterX = 100;
+
+function treasureCounter() {
+  fill(0);
+  text("Treasure: " + treasure, counterX, gridRows*w+50);
+}
+
+function playerLifeCounter() {
+  fill(0);
+  text("Lives Left: " + lives, counterX, gridRows*w+100);
+}
 
 
 class Cell {
@@ -48,7 +61,7 @@ class Cell {
       this.stone = true;
     }
 
-    this.visible = false; 
+    this.visible = false; ///////////////////////////turn back to false soon!
   }
 
   show() {
@@ -70,9 +83,12 @@ class Cell {
           fill(127);
           rect(this.x, this.y, this.w, this.w);
         }
-        textAlign(CENTER);
-        fill(0);
-        text(this.numberOfTreasures, this.x+this.w*0.5, this.y+this.w*0.5);
+
+        if (this.numberOfTreasures > 0) {
+          textAlign(CENTER);
+          fill(0);
+          text(this.numberOfTreasures, this.x+this.w*0.5, this.y+this.w*0.5);
+        }
       }
     }
 
@@ -105,7 +121,6 @@ class Cell {
           }
         }
       }
-      console.log(total);
       this.numberOfTreasures = total;
     }
   }
@@ -124,12 +139,14 @@ class Cell {
 
 
 
+
 function setup() {
   createCanvas(windowWidth, windowHeight);
     canvasSize = windowHeight*0.85 + 1;
-  
-  ///createCanvas(501, 501); //////////////////////////change to window width and height later, and check for max. 
+
   console.log(floor(millis()) + " milliseconds"); //////
+
+  textSize(35);
 
   gridColumns = floor(canvasSize/w);
   gridRows = floor(canvasSize/w);
@@ -141,6 +158,25 @@ function setup() {
       grid[i][j] = new Cell(i, j, w);   
     }
   }
+
+  /////*************************************************************************** */
+
+  // For each level in the y-direction of the grid:
+  let pathX = random(0, gridRows-1);
+  for (let n = gridColumns; n > 0; n--) {
+    if (pathX === 0) {          // And if the chosen block is on the left-most side:
+      pathX += random(0, 1);
+    }         
+    if (pathX === gridRows-1) { // Or if the chosen block is on the right-most side:
+      pathX += random(-1, 0);
+    }
+    else {
+      pathX += random(-1, 1); // Otherwise, pick a random block from the three forward to move to:
+    }
+    fill(0);
+    rect(pathX, n, w, w);
+  }
+  /////*************************************************************************** */
 
   // Check for treasures:
   for (let i = 0; i < gridColumns; i++) {                             
@@ -159,6 +195,8 @@ function draw() {
       grid[i][j].show();   
     }
   }
+  playerLifeCounter()
+  treasureCounter();
 }
 
 
@@ -176,7 +214,15 @@ function mousePressed() {
   for (let i = 0; i < gridColumns; i++) {                             
     for (let j = 0; j < gridRows; j++) {                           
       if (grid[i][j].clickedOn(mouseX, mouseY)) {
-        grid[i][j].reveal();
+        if (grid[i][j].visible === false) {  // If coin hasn't already been found / clicked on before:
+          grid[i][j].reveal();              // show coins.
+          if (grid[i][j].coins) {     
+            treasure += 1;                  // increase treasure counter.
+          }
+          if (grid[i][j].turtle) {     
+            lives -= 1;                  // decrease life counter.
+          }
+        }
       }  
     }
   }
