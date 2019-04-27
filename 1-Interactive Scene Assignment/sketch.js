@@ -171,7 +171,6 @@ function bounceBall() {
     if (ballX > x && ballX < x + rectWidth) {
       dy = -1 * dy;
       //Cause collision sound effect: (Extra for Experts)
-      soundEffect.play();
       //Augment player score:
       score += 1;
     }

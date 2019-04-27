@@ -2,6 +2,12 @@
 // Your Name: Alina Sami
 // Date: Thursday April 18, 2019
 //
+// It's is based off of minesweeper, except the numbers tell you how close you are to treasure, instead of how
+// close you are to a turtle (mine). 
+// Only stepping on rocks with potential treasures around them will siplay numbers to let you know how many 
+// treasures are around them. stepping on a turtle that's neighboring coins will not let you know if there
+// are coins around that turtle. 
+//
 // Extra for Experts:
 // - describe what you did to take this project "above and beyond"
 // > try making your own shapes (Links to an external site.)Links to an external site.
@@ -11,6 +17,12 @@
 // > include basic AI / beating a computer mode in your game (could be as simple as an enemy that tries to catch the player, or something more involved, such as a computer opponent in a game like Tic Tac Toe)
 // - used new array
 
+let bgMusic;
+let turtleSound;
+let coinSound;
+let rock;
+let coin; 
+let turtle;
 
 let grid;
 let gridColumns;
@@ -21,18 +33,33 @@ let canvasSize;
 
 let treasure = 0;
 let lives = 3;
+let goal;
+
+let level;
+
+let hoveringOverGrid;
+
+let screenState;
 
 
-let counterX = 100;
+function preload() {
+  bgMusic = loadSound("assets/music-01.mp3");
+  coinSound = loadSound("assets/input-03.mp3");
+  turtleSound = loadSound("assets/input-06.mp3");
+  rock = loadImage("assets/rock.png");
+  coin = loadImage("assets/coin.png");
+  turtle = loadImage("assets/turtle.PNG");
+}
+
 
 function treasureCounter() {
   fill(0);
-  text("Treasure: " + treasure, counterX, gridRows*w+50);
+  text("Treasure: " + treasure, gridRows*w+100, 100);
 }
 
 function playerLifeCounter() {
   fill(0);
-  text("Lives Left: " + lives, counterX, gridRows*w+100);
+  text("Lives Left: " + lives, gridRows*w+110, 150);
 }
 
 
@@ -69,25 +96,25 @@ class Cell {
       if (this.coins) {    // if there are coins instead, show coins.
         fill(17, 56, 94);
         rect(this.x, this.y, this.w, this.w);
-        fill(255, 194, 40);
-        ellipse(this.x + this.w*0.5, this.y+ this.w*0.5, this.w * 0.5);
+        image(coin, this.x, this.y, this.w, this.w);
       }
-      else {
+      else { 
         if (this.turtle) {      // if there is a turtle, show the turtle.
           fill(17, 56, 94);
           rect(this.x, this.y, this.w, this.w);
-          fill(127);
-          ellipse(this.x + this.w*0.5, this.y+ this.w*0.5, this.w * 0.5);
+          image(turtle, this.x, this.y, this.w, this.w);
         }
         if (this.stone) {       // if there is stone instead, show stone.
           fill(127);
           rect(this.x, this.y, this.w, this.w);
+          image(rock, this.x, this.y, this.w, this.w);
         }
 
         if (this.numberOfTreasures > 0) {
-          textAlign(CENTER);
-          fill(0);
-          text(this.numberOfTreasures, this.x+this.w*0.5, this.y+this.w*0.5);
+          if (!this.turtle) {
+            fill(255, 194, 50);
+            text(this.numberOfTreasures, this.x+this.w*0.5, this.y+this.w*0.7);
+          }
         }
       }
     }
@@ -146,10 +173,124 @@ function setup() {
 
   console.log(floor(millis()) + " milliseconds"); //////
 
+  textAlign(CENTER);
   textSize(35);
+  turtleSound.setVolume(0.5);
+  coinSound.setVolume(0.5);
+  bgMusic.setVolume(0.4);
+
+  bgMusic.loop();                   /////////////////////////////////////
 
   gridColumns = floor(canvasSize/w);
   gridRows = floor(canvasSize/w);
+
+  screenState = "game screen"; ////
+
+  newGame(); ////
+
+  level = 1;  ////
+}
+
+
+
+function draw() {
+  background(53, 45, 45);
+
+
+  if (mouseX >= 0 && mouseX <= gridColumns*w && mouseY >= 0 && mouseY <= gridRows*w) {
+    hoveringOverGrid = true;
+  }
+  else {
+    hoveringOverGrid = false;
+  }
+
+  if (hoveringOverGrid === true) {
+    cursor(HAND);
+  }
+  else {
+    cursor(ARROW);
+  }
+
+
+  
+  if (lives >= 1) {
+    console.log("level " + level);
+    
+    // As long as we have one life, set goal according to level:
+    checkForLevel();
+
+    if (treasure !== goal) {
+      playerLifeCounter()
+      treasureCounter();
+
+      // Player Goal:
+      text("Level " + level + ": " + "Find " + goal + " hidden coins.", 230, gridRows*w+50);
+
+      for (let i = 0; i < gridColumns; i++) {                             
+       for (let j = 0; j < gridRows; j++) {                           
+          grid[i][j].show();   
+        }
+      }
+    }
+
+  }
+  else {
+    gameOverScreen();
+  }
+
+}
+
+
+function gameOverScreen() {
+  background(53, 45, 45);
+  textSize(75);
+  fill(255, 0, 0);
+  text("GAME OVER", windowWidth/2, windowHeight/2);
+  textSize(30);
+  fill(255);
+  text("Level: " + level + "; " + "Total coins collected: " + treasure, windowWidth/2, windowHeight/2 + 50);
+}
+
+// function gameScreen() {
+
+// }
+
+function checkForLevel() {
+  if (level === 1) {
+    goal = 4;
+    if (treasure === goal) {
+      console.log("level up 2");
+      //setTimeout()
+      newGame();
+      level = 2;
+    }
+  }
+  if (level === 2) {
+    goal = 9;
+    if (treasure === goal) {
+      console.log("level up 3");
+      newGame();
+      level = 3; // Only when we change levels, we need to get newGame();
+    }
+  }
+  // textSize(75);
+  //   fill(0, 255, 0);
+  //   text("LEVEL UP", windowWidth/2, windowHeight/2);
+  //   // newGame();
+  if (level === 3) {
+    goal = 14;
+    if (treasure === goal) {
+      textSize(75);
+      fill(0, 0, 255);
+      text("YOU WIN", windowWidth/2, windowHeight/2); 
+    }
+  }
+}
+
+
+
+function newGame() {
+  // Get new grid.
   grid = create2DArray(gridColumns, gridRows); 
 
   // Make grid of cells:
@@ -159,44 +300,15 @@ function setup() {
     }
   }
 
-  /////*************************************************************************** */
-
-  // For each level in the y-direction of the grid:
-  let pathX = random(0, gridRows-1);
-  for (let n = gridColumns; n > 0; n--) {
-    if (pathX === 0) {          // And if the chosen block is on the left-most side:
-      pathX += random(0, 1);
-    }         
-    if (pathX === gridRows-1) { // Or if the chosen block is on the right-most side:
-      pathX += random(-1, 0);
-    }
-    else {
-      pathX += random(-1, 1); // Otherwise, pick a random block from the three forward to move to:
-    }
-    fill(0);
-    rect(pathX, n, w, w);
-  }
-  /////*************************************************************************** */
-
   // Check for treasures:
   for (let i = 0; i < gridColumns; i++) {                             
     for (let j = 0; j < gridRows; j++) { 
       grid[i][j].countTreasures();
     }
   }
-}
 
-
-
-function draw() {
-  background(53, 45, 45);
-  for (let i = 0; i < gridColumns; i++) {                             
-    for (let j = 0; j < gridRows; j++) {                           
-      grid[i][j].show();   
-    }
-  }
-  playerLifeCounter()
-  treasureCounter();
+  // Reset player life to 3 lives.
+  lives = 3;
 }
 
 
@@ -218,9 +330,11 @@ function mousePressed() {
           grid[i][j].reveal();              // show coins.
           if (grid[i][j].coins) {     
             treasure += 1;                  // increase treasure counter.
+            coinSound.play();
           }
           if (grid[i][j].turtle) {     
-            lives -= 1;                  // decrease life counter.
+            lives -= 1;
+            turtleSound.play();                  // decrease life counter.
           }
         }
       }  

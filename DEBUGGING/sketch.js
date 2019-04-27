@@ -219,3 +219,26 @@ function hasWon() {
   }
   return false; //If none of the checks have been created, hasWon() is false. 
 }
+
+
+
+
+////////////MINESWEEPER STUFF:////////////
+  // /////*************************************************************************** */
+
+  // // For each level in the y-direction of the grid:
+  // let pathX = random(0, gridRows-1);
+  // for (let n = gridColumns; n > 0; n--) {
+  //   if (pathX === 0) {          // And if the chosen block is on the left-most side:
+  //     pathX += random(0, 1);
+  //   }         
+  //   if (pathX === gridRows-1) { // Or if the chosen block is on the right-most side:
+  //     pathX += random(-1, 0);
+  //   }
+  //   else {
+  //     pathX += random(-1, 1); // Otherwise, pick a random block from the three forward to move to:
+  //   }
+  //   fill(0);
+  //   rect(pathX, n, w, w);
+  // }
+  // /////*************************************************************************** */
