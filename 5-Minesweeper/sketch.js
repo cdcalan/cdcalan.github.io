@@ -32,19 +32,25 @@ let w = 50;
 let canvasSize;
 
 let treasure = 0;
-let lives = 3;
+let lives;
 let goal;
 
 let level;
 
 let hoveringOverGrid;
 
-let screenState;
 
+let bgLevel1;
+let bgLevel2;
+let bgLevel3;
 
 function preload() {
   bgMusic = loadSound("assets/music-01.mp3");
   coinSound = loadSound("assets/input-03.mp3");
+  bgImage = loadImage("assets/bg.jpg");
+  bgLevel1 = loadImage("assets/level1.png");
+  bgLevel2 = loadImage("assets/level2.png");
+  bgLevel3 = loadImage("assets/level3.png");
   turtleSound = loadSound("assets/input-06.mp3");
   rock = loadImage("assets/rock.png");
   coin = loadImage("assets/coin.png");
@@ -53,13 +59,17 @@ function preload() {
 
 
 function treasureCounter() {
-  fill(0);
-  text("Treasure: " + treasure, gridRows*w+100, 100);
+  if (lives >= 1) {
+    fill(255);
+    text("Treasure: " + treasure, gridRows*w+100, 100);
+  }
 }
 
 function playerLifeCounter() {
-  fill(0);
-  text("Lives Left: " + lives, gridRows*w+110, 150);
+  if (lives >= 1) {
+    fill(255);
+    text("Lives Left: " + lives, gridRows*w+110, 150);
+  }
 }
 
 
@@ -121,7 +131,7 @@ class Cell {
 
     else {
       stroke(0);
-      fill(37, 90, 144);
+      fill(37, 90, 144, 200);
       rect(this.x, this.y, this.w, this.w);
     }
   }
@@ -164,9 +174,6 @@ class Cell {
 }
 
 
-
-
-
 function setup() {
   createCanvas(windowWidth, windowHeight);
     canvasSize = windowHeight*0.85 + 1;
@@ -184,17 +191,21 @@ function setup() {
   gridColumns = floor(canvasSize/w);
   gridRows = floor(canvasSize/w);
 
+  lives = 1;
+
   screenState = "game screen"; ////
 
   newGame(); ////
 
   level = 1;  ////
+
 }
 
 
 
 function draw() {
-  background(53, 45, 45);
+  image(bgImage, 0, 0, windowWidth, windowHeight);
+  background(53, 45, 45, 120);
 
 
   if (mouseX >= 0 && mouseX <= gridColumns*w && mouseY >= 0 && mouseY <= gridRows*w) {
@@ -211,30 +222,12 @@ function draw() {
     cursor(ARROW);
   }
 
-
   
-  if (lives >= 1) {
-    console.log("level " + level);
-    
-    // As long as we have one life, set goal according to level:
-    checkForLevel();
-
-    if (treasure !== goal) {
-      playerLifeCounter()
-      treasureCounter();
-
-      // Player Goal:
-      text("Level " + level + ": " + "Find " + goal + " hidden coins.", 230, gridRows*w+50);
-
-      for (let i = 0; i < gridColumns; i++) {                             
-       for (let j = 0; j < gridRows; j++) {                           
-          grid[i][j].show();   
-        }
-      }
-    }
-
+  if (lives !== 0) {  //works just as well as lives >= 1
+    gameScreen();
   }
   else {
+    noLoop();
     gameOverScreen();
   }
 
@@ -251,25 +244,45 @@ function gameOverScreen() {
   text("Level: " + level + "; " + "Total coins collected: " + treasure, windowWidth/2, windowHeight/2 + 50);
 }
 
-// function gameScreen() {
+function gameScreen() {
+  // As long as we have one life, set goal according to level:
+  checkForLevel();
 
-// }
+  // if (treasure !== goal) {
+  //   playerLifeCounter()
+  //   treasureCounter();
+
+  //   // Player Goal:
+  //   fill(255);
+  //   text("Level " + level + ": " + "Find " + goal + " hidden coins.", 230, gridRows*w+50);
+
+  //   for (let i = 0; i < gridColumns; i++) {                             
+  //    for (let j = 0; j < gridRows; j++) {                           
+  //       grid[i][j].show();   
+  //     }
+  //   }
+  }
+}
+
+
 
 function checkForLevel() {
   if (level === 1) {
+    image(bgLevel1, 0, 0, gridColumns*w, gridRows*w)
     goal = 4;
     if (treasure === goal) {
       console.log("level up 2");
-      //setTimeout()
       newGame();
       level = 2;
     }
   }
   if (level === 2) {
+    image(bgLevel2, 0, 0, gridColumns*w, gridRows*w)
     goal = 9;
     if (treasure === goal) {
       console.log("level up 3");
       newGame();
+
       level = 3; // Only when we change levels, we need to get newGame();
     }
   }
@@ -278,14 +291,21 @@ function checkForLevel() {
   //   text("LEVEL UP", windowWidth/2, windowHeight/2);
   //   // newGame();
   if (level === 3) {
+    image(bgLevel3, 0, 0, gridColumns*w, gridRows*w)
     goal = 14;
     if (treasure === goal) {
-      textSize(75);
-      fill(0, 0, 255);
-      text("YOU WIN", windowWidth/2, windowHeight/2); 
+      level = "Finished";
     }
   }
+
+  if (level === "Finished") {
+    textSize(75);
+    fill(0, 0, 255);
+    text("YOU WIN", windowWidth/2, windowHeight/2); 
+  }
+  
 }
+
 
 
 
@@ -307,8 +327,22 @@ function newGame() {
     }
   }
 
+  // //8888888888888888888888888888888888888888888
+  // fill(255);
+  // textSize(40);
+  // text(level2Message[index], width / 2, height / 2);
+    
+  // if (index <= level2Message.length - 1) {
+  //   if (millis() - timestamp > 1000) {
+  //     index++;
+  //     console.log("index " + index);
+  //     timestamp = millis();
+  //   }
+  // }
+  // //////888888888888888888888888888888888888888888
+
   // Reset player life to 3 lives.
-  lives = 3;
+  lives += 3;
 }
 
 
@@ -323,6 +357,7 @@ function create2DArray (gridColumns, gridRows) {
 
 
 function mousePressed() {
+  console.log("life " + lives);
   for (let i = 0; i < gridColumns; i++) {                             
     for (let j = 0; j < gridRows; j++) {                           
       if (grid[i][j].clickedOn(mouseX, mouseY)) {
@@ -333,11 +368,38 @@ function mousePressed() {
             coinSound.play();
           }
           if (grid[i][j].turtle) {     
-            lives -= 1;
             turtleSound.play();                  // decrease life counter.
+            return (lives -= 1);
           }
         }
       }  
     }
   }
+}
+
+function windowResized() {
+  resizeCanvas(windowWidth, windowHeight);
+  canvasSize = windowHeight*0.85 + 1;
+
+  console.log(floor(millis()) + " milliseconds"); //////
+
+  textAlign(CENTER);
+  textSize(35);
+  turtleSound.setVolume(0.5);
+  coinSound.setVolume(0.5);
+  bgMusic.setVolume(0.4);
+
+  bgMusic.loop();                   /////////////////////////////////////
+
+  gridColumns = floor(canvasSize/w);
+  gridRows = floor(canvasSize/w);
+
+  lives = 1;
+
+  screenState = "game screen"; ////
+
+  newGame(); ////
+
+  level = 1;  ////
+
 }
