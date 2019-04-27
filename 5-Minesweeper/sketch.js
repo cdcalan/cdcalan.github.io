@@ -1,20 +1,33 @@
-// Project Title: Minesweeper (2D Array Assignment)
+// Project Title: Treasure-Hunt 'Minesweeper' (2D Array Assignment)
 // Your Name: Alina Sami
 // Date: Thursday April 18, 2019
 //
-// It's is based off of minesweeper, except the numbers tell you how close you are to treasure, instead of how
-// close you are to a turtle (mine). 
-// Only stepping on rocks with potential treasures around them will siplay numbers to let you know how many 
-// treasures are around them. stepping on a turtle that's neighboring coins will not let you know if there
-// are coins around that turtle. 
 //
+// INSTRUCTIONS: 
+// This is a treasure-hunt game based off of minesweeper, where the goal is to pick up a specified number of 
+// coins at each level while avoiding the turtles (mines). Clicking on a cell in the 'pond' (grid) reveals 
+// 1 of 3 randomly scattered objects; a coin (that's added to your treasure), a turtle (that subtracts 1 
+// of your remaining lives), or a harmless rock (that displays the number of coins that it neighbors). 
+// Coins or turtles, or rocks not neighboring any coins will not display any number. 
+//
+// The "Lives" and "Treasure" counters to the right of the screen display the current number of lives and coins 
+// collected. Text below the grid displays the level and goal for that level. 
+//
+// As soon as the number of coins collected meets the goal, the game automatically upgrades to the next level; 
+// generating a new grid, displaying the level on the grid, updating the message below the grid, and 
+// augmenting the player "Lives" counter by 3.
+//
+// The game is played best at full screen or half-screen, because the smaller the window, the smaller the grid
+// becomes. Resizing the window during the game will generate a new grid, although the game scores will remain
+// as before. 
+// 
+// 
 // Extra for Experts:
-// - describe what you did to take this project "above and beyond"
-// > try making your own shapes (Links to an external site.)Links to an external site.
-// > explore how to deal with the user resizing their window (Links to an external site.)Links to an external site. while your sketch is running
+// - I explored how to make my game compatible with user resizing the window (which I hadn't tried before). 
+// - Added h1 element in index.html file, made my game only take up a portion of the webpage, and learned how 
+//   to change the background color of webpage with html.
+///////////////////////////////////////////////////////////////////////////////////
 // > explore using the mouse wheel (Links to an external site.)Links to an external site. as input
-// > play around with the html of your index.html page. You can make it so that your canvas only takes up a portion of your page, or happens "behind" the rest of the content on your webpage.
-// > include basic AI / beating a computer mode in your game (could be as simple as an enemy that tries to catch the player, or something more involved, such as a computer opponent in a game like Tic Tac Toe)
 // - used new array
 
 let bgMusic;
@@ -25,9 +38,9 @@ let coin;
 let turtle;
 
 let grid;
-let gridColumns;
-let gridRows;
-let w = 50; 
+let gridColumns = 11;
+let gridRows = 11;
+let w; 
 
 let canvasSize;
 
@@ -61,126 +74,30 @@ function preload() {
 function treasureCounter() {
   if (lives >= 1) {
     fill(255);
-    text("Treasure: " + treasure, gridRows*w+100, 100);
+    textSize(w-gridColumns);
+    text("Treasure: " + treasure, gridRows*w, windowHeight/3);
   }
 }
 
 function playerLifeCounter() {
   if (lives >= 1) {
     fill(255);
-    text("Lives Left: " + lives, gridRows*w+110, 150);
+    textSize(w-gridColumns);
+    text("Lives Left: " + lives, gridRows*w, windowHeight/3 + w);
   }
 }
 
 
-class Cell {
-  constructor (i, j, w) {
-    this.i = i;
-    this.j = j;
-    this.x = i*w;
-    this.y = j*w;
-    this.w = w;
 
-    this.numberOfTreasures;
-
-    this.turtle = false;
-    this.coins = false;
-    this.stone = false;
-
-    let guess = random(0, 4);
-    if (guess < 1) {
-      this.turtle = true;
-    }
-    if (guess > 1 && guess < 2) {
-      this.coins = true;
-    }
-    if (guess > 2) {
-      this.stone = true;
-    }
-
-    this.visible = false; ///////////////////////////turn back to false soon!
-  }
-
-  show() {
-    if (this.visible) {       // If visible i.e., if user clicks on cell and . . .
-      if (this.coins) {    // if there are coins instead, show coins.
-        fill(17, 56, 94);
-        rect(this.x, this.y, this.w, this.w);
-        image(coin, this.x, this.y, this.w, this.w);
-      }
-      else { 
-        if (this.turtle) {      // if there is a turtle, show the turtle.
-          fill(17, 56, 94);
-          rect(this.x, this.y, this.w, this.w);
-          image(turtle, this.x, this.y, this.w, this.w);
-        }
-        if (this.stone) {       // if there is stone instead, show stone.
-          fill(127);
-          rect(this.x, this.y, this.w, this.w);
-          image(rock, this.x, this.y, this.w, this.w);
-        }
-
-        if (this.numberOfTreasures > 0) {
-          if (!this.turtle) {
-            fill(255, 194, 50);
-            text(this.numberOfTreasures, this.x+this.w*0.5, this.y+this.w*0.7);
-          }
-        }
-      }
-    }
-
-    else {
-      stroke(0);
-      fill(37, 90, 144, 200);
-      rect(this.x, this.y, this.w, this.w);
-    }
-  }
-
-
-  // Check if player is close to treasure by counting treasures around the cell clicked.
-  countTreasures () {
-    let total = 0;
-    
-    if (this.coins) {
-      total = -1;
-    }
-    else {
-      for (let xDis = -1; xDis <= 1; xDis++) {
-        for (let yDis = -1; yDis <= 1; yDis++) {
-          let i = this.i + xDis;
-          let j = this.j + yDis;
-  
-          if (i > -1 && i < gridColumns && j > -1 && j < gridRows) {
-            let neighbor = grid[i][j]; // Look at all the neighbors.
-            if (neighbor.coins) {
-              total++;
-            }
-          }
-        }
-      }
-      this.numberOfTreasures = total;
-    }
-  }
-
-
-  clickedOn(xPos, yPos) {
-    return(xPos > this.x && xPos < this.x + this.w && yPos > this.y && yPos < this.y +this.w);
-  }
-
-
-  reveal() {
-    this.visible = true;
-  }
-}
 
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
-    canvasSize = windowHeight*0.85 + 1;
+  canvasSize = windowHeight*0.85 + 1;
 
   console.log(floor(millis()) + " milliseconds"); //////
 
-  textAlign(CENTER);
+  //textAlign(CENTER);
   textSize(35);
   turtleSound.setVolume(0.5);
   coinSound.setVolume(0.5);
@@ -188,14 +105,11 @@ function setup() {
 
   bgMusic.loop();                   /////////////////////////////////////
 
-  gridColumns = floor(canvasSize/w);
-  gridRows = floor(canvasSize/w);
-
-  lives = 1;
-
-  screenState = "game screen"; ////
+  w = floor(canvasSize/gridColumns);
 
   newGame(); ////
+  // Reset player life to 3 lives.
+  lives = 3;
 
   level = 1;  ////
 
@@ -248,19 +162,20 @@ function gameScreen() {
   // As long as we have one life, set goal according to level:
   checkForLevel();
 
-  // if (treasure !== goal) {
-  //   playerLifeCounter()
-  //   treasureCounter();
+  if (treasure !== goal) {
+    playerLifeCounter()
+    treasureCounter();
 
-  //   // Player Goal:
-  //   fill(255);
-  //   text("Level " + level + ": " + "Find " + goal + " hidden coins.", 230, gridRows*w+50);
+    // Player Goal:
+    fill(255);
+    textSize(w-gridColumns);
+    text("Level " + level + ": " + "Find " + goal + " hidden coins.", 0, windowHeight-w);
 
-  //   for (let i = 0; i < gridColumns; i++) {                             
-  //    for (let j = 0; j < gridRows; j++) {                           
-  //       grid[i][j].show();   
-  //     }
-  //   }
+    for (let i = 0; i < gridColumns; i++) {                             
+     for (let j = 0; j < gridRows; j++) {                           
+        grid[i][j].show();   
+      }
+    }
   }
 }
 
@@ -273,6 +188,8 @@ function checkForLevel() {
     if (treasure === goal) {
       console.log("level up 2");
       newGame();
+      // Reset player life to 3 lives.
+      lives += 3;
       level = 2;
     }
   }
@@ -282,14 +199,11 @@ function checkForLevel() {
     if (treasure === goal) {
       console.log("level up 3");
       newGame();
-
+      // Reset player life to 3 lives.
+      lives += 3;
       level = 3; // Only when we change levels, we need to get newGame();
     }
   }
-  // textSize(75);
-  //   fill(0, 255, 0);
-  //   text("LEVEL UP", windowWidth/2, windowHeight/2);
-  //   // newGame();
   if (level === 3) {
     image(bgLevel3, 0, 0, gridColumns*w, gridRows*w)
     goal = 14;
@@ -327,22 +241,8 @@ function newGame() {
     }
   }
 
-  // //8888888888888888888888888888888888888888888
-  // fill(255);
-  // textSize(40);
-  // text(level2Message[index], width / 2, height / 2);
-    
-  // if (index <= level2Message.length - 1) {
-  //   if (millis() - timestamp > 1000) {
-  //     index++;
-  //     console.log("index " + index);
-  //     timestamp = millis();
-  //   }
-  // }
-  // //////888888888888888888888888888888888888888888
 
-  // Reset player life to 3 lives.
-  lives += 3;
+  
 }
 
 
@@ -383,23 +283,7 @@ function windowResized() {
 
   console.log(floor(millis()) + " milliseconds"); //////
 
-  textAlign(CENTER);
-  textSize(35);
-  turtleSound.setVolume(0.5);
-  coinSound.setVolume(0.5);
-  bgMusic.setVolume(0.4);
+  w = floor(canvasSize/gridColumns);
 
-  bgMusic.loop();                   /////////////////////////////////////
-
-  gridColumns = floor(canvasSize/w);
-  gridRows = floor(canvasSize/w);
-
-  lives = 1;
-
-  screenState = "game screen"; ////
-
-  newGame(); ////
-
-  level = 1;  ////
-
+  newGame();
 }

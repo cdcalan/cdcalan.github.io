@@ -1,170 +1,101 @@
 
-function Cell(i, j, w) {
+class Cell {
+  constructor (i, j, w) {
+    this.i = i;
+    this.j = j;
+    this.x = i*w;
+    this.y = j*w;
+    this.w = w;
 
-  this.i = i;
+    this.numberOfTreasures;
 
-  this.j = j;
+    this.turtle = false;
+    this.coins = false;
+    this.stone = false;
 
-  this.x = i * w;
+    let guess = random(0, 4);
+    if (guess < 1) {
+      this.turtle = true;
+    }
+    if (guess > 1 && guess < 2) {
+      this.coins = true;
+    }
+    if (guess > 2) {
+      this.stone = true;
+    }
 
-  this.y = j * w;
+    this.visible = false; ///////////////////////////turn back to false soon!
+  }
 
-  this.w = w;
+  show() {
+    if (this.visible) {       // If visible i.e., if user clicks on cell and . . .
+      if (this.coins) {    // if there are coins instead, show coins.
+        fill(17, 56, 94);
+        rect(this.x, this.y, this.w, this.w);
+        image(coin, this.x, this.y, this.w, this.w);
+      }
+      else { 
+        if (this.turtle) {      // if there is a turtle, show the turtle.
+          fill(17, 56, 94);
+          rect(this.x, this.y, this.w, this.w);
+          image(turtle, this.x, this.y, this.w, this.w);
+        }
+        if (this.stone) {       // if there is stone instead, show stone.
+          fill(127);
+          rect(this.x, this.y, this.w, this.w);
+          image(rock, this.x, this.y, this.w, this.w);
+        }
 
-  this.neighborCount = 0;
+        if (this.numberOfTreasures > 0) {
+          if (!this.turtle) {
+            textSize(this.w);
+            fill(255, 194, 50);
+            text(this.numberOfTreasures, this.x+this.w*0.25, this.y+this.w*0.7);
+          }
+        }
+      }
+    }
 
-
-
-  this.bee = false;
-
-  this.revealed = false;
-
-}
-
-
-
-Cell.prototype.show = function() {
-
-  stroke(0);
-
-  noFill();
-
-  rect(this.x, this.y, this.w, this.w);
-
-  if (this.revealed) {
-
-    if (this.bee) {
-
-      fill(127);
-
-      ellipse(this.x + this.w * 0.5, this.y + this.w * 0.5, this.w * 0.5);
-
-    } else {
-
-      fill(200);
-
+    else {
+      stroke(0);
+      fill(37, 90, 144, 200);
       rect(this.x, this.y, this.w, this.w);
-
-      if (this.neighborCount > 0) {
-
-        textAlign(CENTER);
-
-        fill(0);
-
-        text(this.neighborCount, this.x + this.w * 0.5, this.y + this.w - 6);
-
-      }
-
     }
-
   }
 
-}
 
-
-
-Cell.prototype.countBees = function() {
-
-  if (this.bee) {
-
-    this.neighborCount = -1;
-
-    return;
-
-  }
-
-  var total = 0;
-
-  for (var xoff = -1; xoff <= 1; xoff++) {
-
-    var i = this.i + xoff;
-
-    if (i < 0 || i >= cols) continue;
-
-
-
-    for (var yoff = -1; yoff <= 1; yoff++) {
-
-      var j = this.j + yoff;
-
-      if (j < 0 || j >= rows) continue;
-
-
-
-      var neighbor = grid[i][j];
-
-      if (neighbor.bee) {
-
-        total++;
-
-      }
-
+  // Check if player is close to treasure by counting treasures around the cell clicked.
+  countTreasures () {
+    let total = 0;
+    
+    if (this.coins) {
+      total = -1;
     }
-
-  }
-
-  this.neighborCount = total;
-
-}
-
-
-
-Cell.prototype.contains = function(x, y) {
-
-  return (x > this.x && x < this.x + this.w && y > this.y && y < this.y + this.w);
-
-}
-
-
-
-Cell.prototype.reveal = function() {
-
-  this.revealed = true;
-
-  if (this.neighborCount == 0) {
-
-    // flood fill time
-
-    this.floodFill();
-
-  }
-
-}
-
-
-
-Cell.prototype.floodFill = function() {
-
-  for (var xoff = -1; xoff <= 1; xoff++) {
-
-    var i = this.i + xoff;
-
-    if (i < 0 || i >= cols) continue;
-
-
-
-    for (var yoff = -1; yoff <= 1; yoff++) {
-
-      var j = this.j + yoff;
-
-      if (j < 0 || j >= rows) continue;
-
-
-
-      var neighbor = grid[i][j];
-
-      // Note the neighbor.bee check was not required.
-
-      // See issue #184
-
-      if (!neighbor.revealed) {
-
-        neighbor.reveal();
-
+    else {
+      for (let xDis = -1; xDis <= 1; xDis++) {
+        for (let yDis = -1; yDis <= 1; yDis++) {
+          let i = this.i + xDis;
+          let j = this.j + yDis;
+  
+          if (i > -1 && i < gridColumns && j > -1 && j < gridRows) {
+            let neighbor = grid[i][j]; // Look at all the neighbors.
+            if (neighbor.coins) {
+              total++;
+            }
+          }
+        }
       }
-
+      this.numberOfTreasures = total;
     }
-
   }
 
+
+  clickedOn(xPos, yPos) {
+    return(xPos > this.x && xPos < this.x + this.w && yPos > this.y && yPos < this.y +this.w);
+  }
+
+
+  reveal() {
+    this.visible = true;
+  }
 }
