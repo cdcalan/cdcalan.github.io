@@ -25,7 +25,8 @@
 // Extra for Experts:
 // - Added an h1 element in index.html file, and I made my game only take up a portion of the webpage and using 
 //   html.position(). I also learned how to change the background color and text color of webpage with html.
-// - I explored how to make my game-canvas compatible with user resizing the window (which I hadn't tried before). 
+// - I explored how to make my game-canvas compatible with user resizing the window, which I hadn't tried before
+//   (and when to use windowHeight or canvasHeight to resize the canvas with an unchanging html h1 element). 
 // - Used new Array command.
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
