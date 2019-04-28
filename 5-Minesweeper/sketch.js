@@ -1,6 +1,6 @@
 // Project Title: Treasure-Hunt 'Minesweeper' (2D Array Assignment)
 // Your Name: Alina Sami
-// Date: Thursday April 18, 2019
+// Date: April 12, 2019
 //
 //
 // INSTRUCTIONS: 
@@ -17,18 +17,17 @@
 // generating a new grid, displaying the level on the grid, updating the message below the grid, and 
 // augmenting the player "Lives" counter by 3.
 //
-// The game is played best at full screen or half-screen, because the smaller the window, the smaller the grid
-// becomes. Resizing the window during the game will generate a new grid, although the game scores will remain
-// as before. 
+// The canvas is resizable, but the game is played best at full screen or half-screen, because the smaller the
+// window, the smaller the grid becomes. Resizing the window during the game will generate a new grid, 
+// although the game scores will remain as before (and previous game can be continued). 
 // 
 // 
 // Extra for Experts:
-// - I explored how to make my game compatible with user resizing the window (which I hadn't tried before). 
-// - Added h1 element in index.html file, made my game only take up a portion of the webpage, and learned how 
-//   to change the background color of webpage with html.
-///////////////////////////////////////////////////////////////////////////////////
-// > explore using the mouse wheel (Links to an external site.)Links to an external site. as input
-// - used new array
+// - Added an h1 element in index.html file, and I made my game only take up a portion of the webpage and using 
+//   html.position(). I also learned how to change the background color and text color of webpage with html.
+// - I explored how to make my game-canvas compatible with user resizing the window (which I hadn't tried before). 
+// - Used new Array command.
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
 
@@ -41,11 +40,14 @@ let bgLevel1, bgLevel2, bgLevel3;
 // Image variables for storing the images for each object hidden in the minesweeper grid:
 let rock, coin, turtle;
 
+// Variable to store the size of the canvas (so it can be positioned within the html webpage):
+let canvas;
+let canvasHeight = 570;
+
 let grid;   // Stores the grid.
 let cellWidth;   // Stores the width of each cell in grid. 
 let gridColumns = 11, gridRows = 11;   // Stores the number of grid columns and rows.
-let canvasSize;   // Stores the size of the grid.
-let canvasHeight = 570;
+let gridSize;   // Stores the size of the grid.
 
 // Keeps track of "Treasure" and "Lives Left" counters displayed on-screen.
 let treasure = 0, lives;
@@ -73,17 +75,18 @@ function preload() {
 }
 
 
-let canvas; ////////////////////////////////////////////////////////////////
 
 function setup() {
-  createCanvas(windowWidth, canvasHeight);////////////////////////
-  //canvas.position(0, 80);//////////////////////////////////////////////////
+  canvas = createCanvas(windowWidth, canvasHeight);
+
+  // Position the canvas so that it begins below the h1 html text, and takes up only a portion of the webpage:
+  canvas.position(0, 80);
   
   // Compute the grid size, so that the grid only takes up a portion of the canvas:
-  canvasSize = canvasHeight*0.85 + 1;
+  gridSize = windowHeight*0.75 + 1;
 
   // The width of each cell in the grid is dependent on the grid size and (pre-set) number of columns.
-  cellWidth = floor(canvasSize/gridColumns);
+  cellWidth = floor(gridSize/gridColumns);
 
   // Sets volume of loaded sounds:
   turtleSound.setVolume(0.5);
@@ -144,10 +147,10 @@ function gameScreen() {
     treasureCounter();
     playerLifeCounter()
     
-    // Dsiplay the Player Goal:
+    // Dsiplay the Player Goal below the grid:
     fill(255);
     textSize(cellWidth-gridColumns);
-    text("Level " + level + ": " + "Find a total of " + goal + " hidden coins.", 0, canvasHeight-cellWidth);
+    text("Level " + level + ": " + "Find a total of " + goal + " hidden coins.", 0, gridRows*cellWidth + cellWidth);
 
     // Display the grid:
     for (let i = 0; i < gridColumns; i++) {                             
@@ -167,12 +170,12 @@ function gameOverScreen() {
   // Display game-over message:
   textSize(75);
   fill(255, 0, 0);
-  text("GAME OVER", windowWidth/2, canvasHeight/2);
+  text("GAME OVER", 0.7*windowWidth/2, windowHeight/2);
 
   // Display the level and number of coins reached before loss:
   textSize(30);
   fill(255);
-  text("Level: " + level + "; " + "Total coins collected: " + treasure, windowWidth/2, canvasHeight/2 + 50);
+  text("Level: " + level + "; " + "Total coins collected: " + treasure, 0.7*windowWidth/2, windowHeight/2 + 50);
 }
 
 
@@ -219,7 +222,7 @@ function checkForLevel() {
   if (level === "Finished") {
     textSize(75);
     fill(0, 0, 255);
-    text("YOU WIN", windowWidth/2, canvasHeight/2); 
+    text("YOU WIN", 0.7*windowWidth/2, windowHeight/2); 
   }
 }
 
@@ -314,14 +317,14 @@ function mousePressed() {
 
 // When window is resized, the game continues with a new grid:
 function windowResized() {
-  // Compute the new width and height of canvas, to draw the canvas accordingly:
-  resizeCanvas(windowWidth, canvasHeight);
+  // Compute the new width and height of window, to draw the canvas accordingly:
+  resizeCanvas(windowWidth, windowHeight);
 
   // Compute the new grid size, so that the grid only takes up a portion of the canvas:
-  canvasSize = canvasHeight*0.85 + 1;
+  gridSize = windowHeight*0.75 + 1;
 
   // Set the size of each cell in the grid according to the new grid size:
-  cellWidth = floor(canvasSize/gridColumns);
+  cellWidth = floor(gridSize/gridColumns);
 
   // If window is resized, create new grid (but keep the scores/levels from before):
   newGame();
