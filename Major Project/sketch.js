@@ -65,6 +65,9 @@ function draw() {
 function displayStartScreen() {
   background(50, 100, 150);
 
+  fill(200, 50, 20);
+  rect(windowWdth/2, windowHeight/2, 250, 200); 
+
   startButton.show();
   infoButton.show();
 
