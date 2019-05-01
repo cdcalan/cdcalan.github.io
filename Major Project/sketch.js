@@ -16,27 +16,46 @@ let player;
 
 let screenState;
 
+let startButton;
+let infoButton;
+
+let menuX;
+let menuY;
+let menuWidth = 250;
+let menuHeight = 200;
+
+
 class Button {
-  constructor() {
-    this.x = windowWidth/2;
-    this.y = windowHeight/2;
+  constructor(x, y) {
     this.w = 150;
     this.h = 50;
+    this.x = x;
+    this.y = y;
   }
   show(){
-
+    fill(255);
+    rect(this.x + (menuWidth/4), this.y, this.w, this.h, 50);
   }
 }
+
+
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
 
   screenState = "Start Screen";
 
-  // Demo Sprite:
-  player = new User(300, windowHeight-250);
-}
+  menuX = (windowWidth/2) - (menuWidth/2);
+  menuY = (windowHeight/2) - (menuHeight/2);
 
+  // Demo Sprite Object:
+  player = new User(300, windowHeight-250);
+
+  // Menu Button Objects:
+  startButton = new Button(menuX, menuY);
+  infoButton = new Button(menuX, menuY + 50);
+  console.log(menuX, menuY);
+}
 
 
 
@@ -65,8 +84,8 @@ function draw() {
 function displayStartScreen() {
   background(50, 100, 150);
 
-  fill(200, 50, 20);
-  rect(windowWdth/2, windowHeight/2, 250, 200); 
+  fill(200, 50, 20, 100);
+  rect(menuX, menuY, menuWidth, menuHeight, 30); 
 
   startButton.show();
   infoButton.show();
