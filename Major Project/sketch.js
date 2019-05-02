@@ -12,36 +12,30 @@
 // - create a start screen with menu buttons: start, info
 // - Extra: loading animation? (maybe use css)?
 
+
+
+// Player object:
 let player;
 
+// Screen state variable:
 let screenState;
 
+// Button objects:
 let startButton;
 let infoButton;
 
+// Menu coordinates and dimensions:
 let menuX;
 let menuY;
 let menuWidth = 250;
 let menuHeight = 200;
 
 
-class Button {
-  constructor(x, y) {
-    this.w = 150;
-    this.h = 50;
-    this.x = x;
-    this.y = y;
-  }
-  show(){
-    fill(255);
-    rect(this.x + (menuWidth/4), this.y, this.w, this.h, 50);
-  }
-}
-
-
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
+
+  textSize(40);
 
   screenState = "Start Screen";
 
@@ -52,12 +46,10 @@ function setup() {
   player = new User(300, windowHeight-250);
 
   // Menu Button Objects:
-  startButton = new Button(menuX, menuY);
-  infoButton = new Button(menuX, menuY + 50);
+  startButton = new Button(menuX, menuY + 20, "Start");
+  infoButton = new Button(menuX, menuY + 95, "Info");
   console.log(menuX, menuY);
 }
-
-
 
 function draw() {
   background(220);
@@ -67,6 +59,9 @@ function draw() {
   }
   else if (screenState === "Game Screen") {
     displayGameScreen();
+  }
+  else if (screenState === "Info Screen") {
+    displayInfoScreen();
   }
   else if (screenState === "Game Over") {
     displayGameOverScreen();
@@ -80,7 +75,20 @@ function draw() {
 
 
 
+function mousePressed() {
+  if (screenState === "Start Screen") {
+    if (startButton.clickedOn(mouseX, mouseY)) {
+      screenState = "Game Screen";
+    }
+    if (infoButton.clickedOn(mouseX, mouseY)) {
+      screenState = "Info Screen";
+    }
+  }
+}
 
+
+
+//SCREENS-----------------------------------------------------------------------------------------------------------------------------
 function displayStartScreen() {
   background(50, 100, 150);
 
@@ -91,3 +99,28 @@ function displayStartScreen() {
   infoButton.show();
 
 }
+
+
+
+function displayInfoScreen() {
+  background(200);
+}
+
+
+
+function displayGameScreen() {
+  background(70, 150, 100);
+}
+
+
+
+function displayGameOverScreen() {
+  background(80);
+  textSize(80);
+  textAlign(CENTER);
+  fill(255, 0, 0);
+  text("GAME OVER", windowWidth/2, windowHeight/2);
+}
+
+/////////////////COLORS//////////////////////
+// grass = (70, 150, 10)
