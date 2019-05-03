@@ -4,8 +4,8 @@ class Sprites {
     this.x = x;
     this.y = y;
     // Dimensions:
-    this.h = 50;
-    this.w = 20;
+    this.h = 75;
+    this.w = 50;
     // Speed variables:
     this.dx = random(3, 10);
     this.dy = 1;
@@ -37,11 +37,26 @@ class Sprites {
 
 class User extends Sprites {
   // Implement gravity!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-  jump() {
+  updateShow(playerAvatar) {
+    if (keyIsPressed && keyCode === UP_ARROW) {
+      playerAvatar = marioJump;
+    }
+    else if (keyIsPressed && keyCode === RIGHT_ARROW) {
+      playerAvatar = marioRun;
+    }
+    else {
+      playerAvatar = marioDuck;
+    }
+    image(playerAvatar, this.x, this.y, this.w, this.h);
+  }
+
+  jump(playerAvatar) {
     if (keyIsPressed && keyCode === UP_ARROW) {
       this.y -= this.dy;
-
     }
+  }
+
+  kick() {
   }
 
   attack() {

@@ -30,6 +30,22 @@ let menuY;
 let menuWidth = 250;
 let menuHeight = 200;
 
+// Player variables:
+let playerLives;
+let score;
+
+let playerAvatar;
+let marioRun;
+let marioJump;
+let marioDuck;
+
+
+function preload() {
+  marioRun = loadImage("assets/marioRun.png");
+  marioJump = loadImage("assets/marioJump.png");
+  marioDuck = loadImage("assets/marioDuck.png");
+}
+
 
 
 function setup() {
@@ -37,6 +53,7 @@ function setup() {
 
   textSize(40);
 
+  // Start Screen: 
   screenState = "Start Screen";
 
   menuX = (windowWidth/2) - (menuWidth/2);
@@ -48,8 +65,15 @@ function setup() {
   // Menu Button Objects:
   startButton = new Button(menuX, menuY + 20, "Start");
   infoButton = new Button(menuX, menuY + 95, "Info");
-  console.log(menuX, menuY);
+
+  // Gameplay stuff ----------------------------------------------should i be declaring these in setup or the gamescreen?
+  playerLives = 4;
+  score = 0;
+
+  playerAvatar = marioDuck;
 }
+
+
 
 function draw() {
   background(220);
@@ -67,10 +91,7 @@ function draw() {
     displayGameOverScreen();
   }
   // Optional: level up screens? or just messages?
-  
-  player.show();
-  player.move();
-  player.jump();
+
 }
 
 
@@ -102,6 +123,7 @@ function displayStartScreen() {
 
 
 
+// Scrolling background??????????????????????????????????
 function displayInfoScreen() {
   background(200);
 }
@@ -110,16 +132,23 @@ function displayInfoScreen() {
 
 function displayGameScreen() {
   background(70, 150, 100);
+  player.show();
+  player.updateShow(playerAvatar);
+  player.move(playerAvatar);
+  player.jump(playerAvatar);
 }
 
 
 
 function displayGameOverScreen() {
   background(80);
-  textSize(80);
   textAlign(CENTER);
+  textSize(80);
   fill(255, 0, 0);
   text("GAME OVER", windowWidth/2, windowHeight/2);
+  textSize(50);
+  fill(255);
+  text("Score " + score, windowWidth/2, windowHeight/2);
 }
 
 /////////////////COLORS//////////////////////
