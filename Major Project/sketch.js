@@ -40,6 +40,11 @@ let marioJump;
 let marioDuck;
 
 
+let gravity;
+let yLocation, ground;
+let yVelocity, yAcceleration;
+
+
 function preload() {
   marioRun = loadImage("assets/marioRun.png");
   marioJump = loadImage("assets/marioJump.png");
@@ -59,8 +64,13 @@ function setup() {
   menuX = (windowWidth/2) - (menuWidth/2);
   menuY = (windowHeight/2) - (menuHeight/2);
 
+  yVelocity = 0;
+  yAcceleration = 0;
+  gravity = 0.1;
+  ground = windowHeight-250;
+  yLocation = ground;
   // Demo Sprite Object:
-  player = new User(300, windowHeight-250);
+  player = new User(300, yLocation);
 
   // Menu Button Objects:
   startButton = new Button(menuX, menuY + 20, "Start");
@@ -136,6 +146,8 @@ function displayGameScreen() {
   player.updateShow(playerAvatar);
   player.move(playerAvatar);
   player.jump(playerAvatar);
+
+  playerLifeCounter();
 }
 
 
@@ -153,3 +165,12 @@ function displayGameOverScreen() {
 
 /////////////////COLORS//////////////////////
 // grass = (70, 150, 10)
+
+function playerLifeCounter() {
+  fill(190);
+  rect(25, 25, 125, 40, 5);
+  
+  fill(0);
+  textSize(25);
+  text("Life : " + playerLives, 30, 55);
+}
