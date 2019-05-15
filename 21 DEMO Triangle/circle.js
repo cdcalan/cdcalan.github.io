@@ -6,6 +6,23 @@
 // - describe what you did to take this project "above and beyond"
 
 
+// CODING JS PRACTICE COUNT 7:
+// function count7(n){
+//   let right = n % 10;
+//   let rest = Math.floor(n/10);
+//   if (n === 0) {
+//     return 0;
+//   }
+//   else {
+//     if (right === 7) {
+//       return 1 + count7(rest);
+//     }
+//     return count7(rest);
+//   }
+// }
+
+
+
 let circlePoints = [    //square brackets means creating an array
   {x: 400, y:350}, 
   {x: 100, y: 600}
