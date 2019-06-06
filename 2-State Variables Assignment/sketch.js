@@ -349,7 +349,7 @@ function displayScreen3() {
   
   // Draws building obstacles that move with the background:
   fill(51);
-  for (let i = 600; i < windowWidth; i += 300) {
+  for (let i = 200; i < windowWidth; i += 100) {
     rect(i, windowHeight, 50, 200);
   }
 
